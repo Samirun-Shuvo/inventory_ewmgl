@@ -72,57 +72,46 @@ const ProductList = () => {
         Product List ({products.length})
       </h1>
 
-      <div className="overflow-x-auto border rounded shadow bg-white">
-        <table className="min-w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-gray-200 text-left">
-              <th className="border px-4 py-2">#</th>
-              <th className="border px-4 py-2">Product Type</th>
-              <th className="border px-4 py-2">Organization</th>
-              <th className="border px-4 py-2">Brand</th>
-              <th className="border px-4 py-2">Model</th>
-              <th className="border px-4 py-2">Processor</th>
-              <th className="border px-4 py-2">Generation</th>
-              <th className="border px-4 py-2">SSD</th>
-              <th className="border px-4 py-2">HDD</th>
-              <th className="border px-4 py-2">Ram</th>
-              <th className="border px-4 py-2">Service Tag</th>
-              <th className="border px-4 py-2">Serial Number</th>
-              <th className="border px-4 py-2">Display Size</th>
-              <th className="border px-4 py-2">Type</th>
-              <th className="border px-4 py-2">Status</th>
-              <th className="border px-4 py-2 text-center">Action</th>
+      <div className="overflow-x-auto border border-gray-200 shadow rounded-lg">
+        <table className="w-full text-sm text-left text-gray-700">
+          <thead className="bg-[#d8e0ec] text-xs uppercase tracking-wide text-gray-600">
+            <tr>
+              <th className="border p-3">#</th>
+              <th className="border p-3">Product Type</th>
+              <th className="border p-3">Organization</th>
+              <th className="border p-3">Brand</th>
+              <th className="border p-3">Model</th>
+              <th className="border p-3">Processor</th>
+              <th className="border p-3">Generation</th>
+              <th className="border p-3">SSD</th>
+              <th className="border p-3">HDD</th>
+              <th className="border p-3">Ram</th>
+              <th className="border p-3">Service Tag</th>
+              <th className="border p-3">Serial Number</th>
+              <th className="border p-3">Display Size</th>
+              <th className="border p-3">Type</th>
+              <th className="border p-3">Status</th>
+              <th className="border p-3 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product, index) => (
-              <tr key={product._id} className="hover:bg-gray-50">
-                <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">
-                  {product.product_type || "-"}
-                </td>
-                <td className="border px-4 py-2">
-                  {product.organization || "-"}
-                </td>
-                <td className="border px-4 py-2">{product.brand || "-"}</td>
-                <td className="border px-4 py-2">{product.model || "-"}</td>
-                <td className="border px-4 py-2">{product.processor || "-"}</td>
-                <td className="border px-4 py-2">
-                  {product.generation || "-"}
-                </td>
-                <td className="border px-4 py-2">{product.ssd || "-"}</td>
-                <td className="border px-4 py-2">{product.hdd || "-"}</td>
-                <td className="border px-4 py-2">{product.ram || "-"}</td>
-                <td className="border px-4 py-2">
-                  {product.service_tag || "-"}
-                </td>
-                <td className="border px-4 py-2">
-                  {product.serial_number || "-"}
-                </td>
-                <td className="border px-4 py-2">
-                  {product.display_size || "-"}
-                </td>
-                <td className="border px-4 py-2">{product.type || "-"}</td>
+              <tr key={product._id} className="hover:bg-gray-50 transition">
+                <td className="border p-3">{index + 1}</td>
+                <td className="border p-3">{product.product_type || "-"}</td>
+                <td className="border p-3">{product.organization || "-"}</td>
+                <td className="border p-3">{product.brand || "-"}</td>
+                <td className="border p-3">{product.model || "-"}</td>
+                <td className="border p-3">{product.processor || "-"}</td>
+                <td className="border p-3">{product.generation || "-"}</td>
+                <td className="border p-3">{product.ssd || "-"}</td>
+                <td className="border p-3">{product.hdd || "-"}</td>
+                <td className="border p-3">{product.ram || "-"}</td>
+                <td className="border p-3">{product.service_tag || "-"}</td>
+                <td className="border p-3">{product.serial_number || "-"}</td>
+                <td className="border p-3">{product.display_size || "-"}</td>
+                <td className="border p-3">{product.type || "-"}</td>
+
                 <td className="border p-3">
                   <span
                     className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${

@@ -77,7 +77,7 @@ const EmployeeList = () => {
 
       <div className="overflow-x-auto border border-gray-200 shadow rounded-lg">
         <table className="w-full text-sm text-left text-gray-700">
-          <thead className="bg-gray-100 text-xs uppercase tracking-wide text-gray-600">
+          <thead className="bg-[#d8e0ec] text-xs uppercase tracking-wide text-gray-600">
             <tr>
               <th className="border p-3">#</th>
               <th className="border p-3">Name</th>
