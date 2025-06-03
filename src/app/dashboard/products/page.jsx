@@ -1,5 +1,6 @@
 "use client";
 
+import Heading from "@/components/Heading";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -68,62 +69,59 @@ const ProductList = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold mb-6">
-        Product List ({products.length})
-      </h1>
-
-      <div className="overflow-x-auto border border-gray-200 shadow rounded-lg">
-        <table className="w-full text-sm text-left text-gray-700">
-          <thead className="bg-[#d8e0ec] text-xs uppercase tracking-wide text-gray-600">
-            <tr>
-              <th className="border p-3">#</th>
-              <th className="border p-3">Product Type</th>
-              <th className="border p-3">Organization</th>
-              <th className="border p-3">Brand</th>
-              <th className="border p-3">Model</th>
-              <th className="border p-3">Processor</th>
-              <th className="border p-3">Generation</th>
-              <th className="border p-3">SSD</th>
-              <th className="border p-3">HDD</th>
-              <th className="border p-3">Ram</th>
-              <th className="border p-3">Service Tag</th>
-              <th className="border p-3">Serial Number</th>
-              <th className="border p-3">Display Size</th>
-              <th className="border p-3">Type</th>
-              <th className="border p-3">Status</th>
-              <th className="border p-3 text-center">Action</th>
+      <Heading title="Product List" length={products.length} />
+      <div className="overflow-x-auto">
+        <table className="table table-xs">
+          <thead className="bg-[#e9d8d8]">
+            <tr className="text-center">
+              <th>#</th>
+              <th>Product Type</th>
+              <th>Organization</th>
+              <th>Brand</th>
+              <th>Model</th>
+              <th>Processor</th>
+              <th>Generation</th>
+              <th>SSD</th>
+              <th>HDD</th>
+              <th>Ram</th>
+              <th>Service Tag</th>
+              <th>Serial Number</th>
+              <th>Display Size</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product, index) => (
-              <tr key={product._id} className="hover:bg-gray-50 transition">
-                <td className="border p-3">{index + 1}</td>
-                <td className="border p-3">{product.product_type || "-"}</td>
-                <td className="border p-3">{product.organization || "-"}</td>
-                <td className="border p-3">{product.brand || "-"}</td>
-                <td className="border p-3">{product.model || "-"}</td>
-                <td className="border p-3">{product.processor || "-"}</td>
-                <td className="border p-3">{product.generation || "-"}</td>
-                <td className="border p-3">{product.ssd || "-"}</td>
-                <td className="border p-3">{product.hdd || "-"}</td>
-                <td className="border p-3">{product.ram || "-"}</td>
-                <td className="border p-3">{product.service_tag || "-"}</td>
-                <td className="border p-3">{product.serial_number || "-"}</td>
-                <td className="border p-3">{product.display_size || "-"}</td>
-                <td className="border p-3">{product.type || "-"}</td>
-
-                <td className="border p-3">
+              <tr key={product._id}>
+                <td>{index + 1}</td>
+                <td>{product.product_type || "-"}</td>
+                <td>{product.organization || "-"}</td>
+                <td>{product.brand || "-"}</td>
+                <td>{product.model || "-"}</td>
+                <td>{product.processor || "-"}</td>
+                <td>{product.generation || "-"}</td>
+                <td>{product.ssd || "-"}</td>
+                <td>{product.hdd || "-"}</td>
+                <td>{product.ram || "-"}</td>
+                <td>{product.service_tag || "-"}</td>
+                <td>{product.serial_number || "-"}</td>
+                <td>{product.display_size || "-"}</td>
+                <td>{product.type || "-"}</td>
+                <td>
                   <span
-                    className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                      product.status === "Active"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
+                    className={`badge ${
+                      product.status === "active"
+                        ? "badge-success"
+                        : "badge-warning"
                     }`}
                   >
-                    {product.status}
+                    {product?.status}
                   </span>
                 </td>
-                <td className="border p-3 text-center whitespace-nowrap">
+
+                <td>
                   <div className="flex justify-center items-center gap-2">
                     <button
                       onClick={() => handleView(product._id)}

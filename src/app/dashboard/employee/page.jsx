@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import Heading from "@/components/Heading";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -71,49 +72,48 @@ const EmployeeList = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold mb-6">
-        Employee List ({employees.length})
-      </h1>
+      <Heading title="Employee List" length={employees.length} />
 
-      <div className="overflow-x-auto border border-gray-200 shadow rounded-lg">
-        <table className="w-full text-sm text-left text-gray-700">
-          <thead className="bg-[#d8e0ec] text-xs uppercase tracking-wide text-gray-600">
-            <tr>
-              <th className="border p-3">#</th>
-              <th className="border p-3">Name</th>
-              <th className="border p-3">PF</th>
-              <th className="border p-3">Designation</th>
-              <th className="border p-3">Department</th>
-              <th className="border p-3">Organization</th>
-              <th className="border p-3">Email</th>
-              <th className="border p-3">Phone</th>
-              <th className="border p-3">Status</th>
-              <th className="border p-3 text-center">Action</th>
+      <div className="overflow-x-auto">
+        <table className="table table-xs">
+          <thead className="bg-[#e9d8d8]">
+            <tr className="text-center">
+              <th>#</th>
+              <th>Name</th>
+              <th>PF</th>
+              <th>Designation</th>
+              <th>Department</th>
+              <th>Organization</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-center">
             {employees.map((emp, index) => (
-              <tr key={emp._id} className="hover:bg-gray-50 transition">
-                <td className="border p-3">{index + 1}</td>
-                <td className="border p-3">{emp.name}</td>
-                <td className="border p-3">{emp.pf}</td>
-                <td className="border p-3">{emp.designation}</td>
-                <td className="border p-3">{emp.department}</td>
-                <td className="border p-3">{emp.organization}</td>
-                <td className="border p-3">{emp.email}</td>
-                <td className="border p-3">{emp.phone}</td>
-                <td className="border p-3">
+              <tr key={emp._id}>
+                <td>{index + 1}</td>
+                <td>{emp.name}</td>
+                <td>{emp.pf}</td>
+                <td>{emp.designation}</td>
+                <td>{emp.department}</td>
+                <td>{emp.organization}</td>
+                <td>{emp.email}</td>
+                <td>{emp.phone}</td>
+                <td>
                   <span
-                    className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                    className={`badge ${
                       emp.status === "Active"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
+                        ? "badge-success"
+                        : "badge-warning"
                     }`}
                   >
-                    {emp.status}
+                    {emp?.status}
                   </span>
                 </td>
-                <td className="border p-3 text-center whitespace-nowrap">
+
+                <td>
                   <div className="flex justify-center items-center gap-2">
                     <button
                       onClick={() => handleView(emp._id)}

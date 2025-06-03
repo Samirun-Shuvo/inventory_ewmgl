@@ -1,7 +1,7 @@
 export const organizations = [
   "East West Media Group PLC",
   "Bangladesh Protidin",
-  "The Daily Kalerkantho",
+  "The Daily Kaler Kantho",
   "Bangla News 24",
   "Capital FM",
 ];
