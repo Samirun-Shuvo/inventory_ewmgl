@@ -24,7 +24,7 @@ const AddUser = () => {
   const onSubmit = async (data) => {
     setMessage({ type: "", text: "" });
     console.log(data);
-    
+
     // try {
     //   const res = await fetch("/api/user", {
     //     method: "POST",
@@ -162,7 +162,7 @@ const AddUser = () => {
           {[
             { name: "brand", label: "Brand", type: "text" },
             { name: "model", label: "Model", type: "text" },
-            { name: "display_size", label: "Display Size", type: "text" },
+
             {
               name: "service_tag",
               label: "Service Tag",
@@ -178,6 +178,33 @@ const AddUser = () => {
                 message: "",
               },
             },
+          ].map(({ name, label, type = "text", pattern }) => (
+            <div key={name}>
+              <label
+                htmlFor={name}
+                className="block text-sm font-medium text-gray-700"
+              >
+                {label} <span className="text-red-500">*</span>
+              </label>
+              <input
+                id={name}
+                type={type}
+                {...register(name, {
+                  required: `${label} is required`,
+                  ...(pattern && { pattern }),
+                })}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              {errors[name] && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors[name]?.message}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[
             {
               name: "processor",
               label: "Processor",
@@ -213,6 +240,7 @@ const AddUser = () => {
                 message: "",
               },
             },
+            { name: "display_size", label: "Display Size", type: "text" },
             {
               name: "description",
               label: "Description",
