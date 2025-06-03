@@ -1,5 +1,6 @@
 "use client";
 
+import Heading from "@/components/Heading";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -68,12 +69,10 @@ const ProductList = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold mb-6">
-        Product List ({products.length})
-      </h1>
+      <Heading title="Product List" length={products.length} />
       <div className="overflow-x-auto">
         <table className="table table-xs">
-          <thead>
+          <thead className="bg-[#e9d8d8]">
             <tr className="text-center">
               <th>#</th>
               <th>Product Type</th>
@@ -110,7 +109,18 @@ const ProductList = () => {
                 <td>{product.serial_number || "-"}</td>
                 <td>{product.display_size || "-"}</td>
                 <td>{product.type || "-"}</td>
-                <td>{product.status}</td>
+                <td>
+                  <span
+                    className={`badge ${
+                      product.status === "active"
+                        ? "badge-success"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {product?.status}
+                  </span>
+                </td>
+
                 <td>
                   <div className="flex justify-center items-center gap-2">
                     <button

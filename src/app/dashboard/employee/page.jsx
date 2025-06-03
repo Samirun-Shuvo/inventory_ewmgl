@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import Heading from "@/components/Heading";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -71,13 +72,11 @@ const EmployeeList = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold mb-6">
-        Employee List ({employees.length})
-      </h1>
+      <Heading title="Employee List" length={employees.length} />
 
       <div className="overflow-x-auto">
         <table className="table table-xs">
-          <thead>
+          <thead className="bg-[#e9d8d8]">
             <tr className="text-center">
               <th>#</th>
               <th>Name</th>
@@ -91,7 +90,7 @@ const EmployeeList = () => {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-center">
             {employees.map((emp, index) => (
               <tr key={emp._id}>
                 <td>{index + 1}</td>
@@ -102,7 +101,18 @@ const EmployeeList = () => {
                 <td>{emp.organization}</td>
                 <td>{emp.email}</td>
                 <td>{emp.phone}</td>
-                <td>{emp.status}</td>
+                <td>
+                  <span
+                    className={`badge ${
+                      emp.status === "Active"
+                        ? "badge-success"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {emp?.status}
+                  </span>
+                </td>
+
                 <td>
                   <div className="flex justify-center items-center gap-2">
                     <button

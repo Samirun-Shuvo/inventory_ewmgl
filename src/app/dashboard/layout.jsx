@@ -1,3 +1,4 @@
+import BackButton from "@/components/BackButton";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 
@@ -7,7 +8,12 @@ export default function DashboardLayout({ children }) {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <main className="p-6">{children}</main>
+        <main className="p-6">
+          <div>
+            <BackButton />
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );
