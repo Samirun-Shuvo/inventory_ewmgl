@@ -29,3 +29,32 @@ export async function DELETE(req, { params }) {
     });
   }
 }
+
+export async function GET(req, { params }) {
+  try {
+    const { id } = params;
+
+    const { db } = await connectToDatabase();
+    const product = await db
+      .collection("products")
+      .findOne({ service_tag: id });
+
+    if (!product) {
+      return new Response(JSON.stringify({ message: "product not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify(product), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}

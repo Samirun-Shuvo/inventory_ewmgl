@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Heading from "@/components/Heading";
+import Link from "next/link";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -26,11 +27,6 @@ const EmployeeList = () => {
 
     fetchEmployees();
   }, []);
-
-  const handleView = (id) => {
-    console.log("View", id);
-    // Implement view logic here
-  };
 
   const handleEdit = (id) => {
     console.log("Edit", id);
@@ -115,13 +111,17 @@ const EmployeeList = () => {
 
                 <td>
                   <div className="flex justify-center items-center gap-2">
-                    <button
-                      onClick={() => handleView(emp._id)}
+                    <Link
+                      href={{
+                        pathname: "/dashboard/employee/view",
+                        query: { emp: JSON.stringify(emp) }, // serialize the emp object
+                      }}
                       className="text-blue-500 hover:text-blue-700 cursor-pointer"
                       title="View"
                     >
                       <Eye size={18} />
-                    </button>
+                    </Link>
+
                     <button
                       onClick={() => handleEdit(emp._id)}
                       className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
