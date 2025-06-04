@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast"; // <-- Added import here
+import { toast } from "react-hot-toast";
 import {
   organizations,
   departments,
@@ -63,98 +63,164 @@ const AddEmployee = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            { name: "name", label: "Full Name" },
-            {
-              name: "email",
-              label: "Email",
-              type: "email",
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: "Invalid email format",
-              },
-            },
-            {
-              name: "phone",
-              label: "Phone Number",
-              pattern: {
-                value: /^[0-9]{10,15}$/,
-                message: "Enter a valid phone number",
-              },
-            },
-            { name: "pf", label: "PF" },
-          ].map(({ name, label, type = "text", pattern }) => (
-            <div key={name}>
-              <label
-                htmlFor={name}
-                className="block text-sm font-medium text-gray-700"
-              >
-                {label}
-              </label>
-              <input
-                id={name}
-                type={type}
-                {...register(name, {
-                  required: `${label} is required`,
-                  ...(pattern && { pattern }),
-                })}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-              {errors[name] && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors[name]?.message}
-                </p>
-              )}
-            </div>
-          ))}
+          {/* Full Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name
+            </label>
+            <input
+              type="text"
+              {...register("name", { required: "Full Name is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "Invalid email format",
+                },
+              })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            )}
+          </div>
+
+          {/* Phone Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Phone Number
+            </label>
+            <input
+              type="text"
+              {...register("phone", {
+                required: "Phone Number is required",
+                pattern: {
+                  value: /^[0-9]{10,15}$/,
+                  message: "Enter a valid phone number",
+                },
+              })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+            {errors.phone && (
+              <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+            )}
+          </div>
+
+          {/* PF Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              PF Number
+            </label>
+            <input
+              type="number"
+              {...register("pf", { required: "PF Number is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+            {errors.pf && (
+              <p className="text-red-500 text-sm mt-1">{errors.pf.message}</p>
+            )}
+          </div>
         </div>
 
+        {/* Dropdowns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            {
-              name: "organization",
-              label: "Organizations",
-              options: organizations,
-            },
-            { name: "department", label: "Department", options: departments },
-            {
-              name: "designation",
-              label: "Designation",
-              options: designations,
-            },
-            {
-              name: "status",
-              label: "Status",
-              options: ["Active", "Inactive"],
-            },
-          ].map(({ name, label, options }) => (
-            <div key={name}>
-              <label
-                htmlFor={name}
-                className="block text-sm font-medium text-gray-700"
-              >
-                {label}
-              </label>
-              <select
-                id={name}
-                {...register(name, { required: `${label} is required` })}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Select {label.toLowerCase()}</option>
-                {options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-              {errors[name] && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors[name]?.message}
-                </p>
-              )}
-            </div>
-          ))}
+          {/* Organization */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Organization
+            </label>
+            <select
+              {...register("organization", { required: "Organization is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+            >
+              <option value="">Select organization</option>
+              {organizations.map((org) => (
+                <option key={org} value={org}>
+                  {org}
+                </option>
+              ))}
+            </select>
+            {errors.organization && (
+              <p className="text-red-500 text-sm mt-1">{errors.organization.message}</p>
+            )}
+          </div>
+
+          {/* Department */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Department
+            </label>
+            <select
+              {...register("department", { required: "Department is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+            >
+              <option value="">Select department</option>
+              {departments.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+            {errors.department && (
+              <p className="text-red-500 text-sm mt-1">{errors.department.message}</p>
+            )}
+          </div>
+
+          {/* Designation */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Designation
+            </label>
+            <select
+              {...register("designation", { required: "Designation is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+            >
+              <option value="">Select designation</option>
+              {designations.map((des) => (
+                <option key={des} value={des}>
+                  {des}
+                </option>
+              ))}
+            </select>
+            {errors.designation && (
+              <p className="text-red-500 text-sm mt-1">{errors.designation.message}</p>
+            )}
+          </div>
+
+          {/* Status */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Status
+            </label>
+            <select
+              {...register("status", { required: "Status is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+            >
+              <option value="">Select status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+            {errors.status && (
+              <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>
+            )}
+          </div>
         </div>
+
+        {/* Submit Button */}
         <div className="md:col-span-2">
           <button
             type="submit"
