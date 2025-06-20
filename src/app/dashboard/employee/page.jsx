@@ -9,6 +9,7 @@ import Link from "next/link";
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -30,7 +31,6 @@ const EmployeeList = () => {
 
   const handleEdit = (id) => {
     console.log("Edit", id);
-    // Implement edit logic here
   };
 
   const handleDelete = async (id) => {
@@ -55,7 +55,21 @@ const EmployeeList = () => {
     }
   };
 
-  // ✅ Conditional return for loading and empty states
+  // 🔍 Filter employees based on search term
+  const filteredEmployees = employees.filter((emp) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      emp.name?.toLowerCase().includes(search) ||
+      emp.pf?.toLowerCase().includes(search) ||
+      emp.designation?.toLowerCase().includes(search) ||
+      emp.department?.toLowerCase().includes(search) ||
+      emp.organization?.toLowerCase().includes(search) ||
+      emp.email?.toLowerCase().includes(search) ||
+      emp.phone?.toLowerCase().includes(search) ||
+      emp.status?.toLowerCase().includes(search)
+    );
+  });
+
   if (loading)
     return (
       <p className="text-center py-8 text-gray-600">Loading employees...</p>
@@ -68,13 +82,24 @@ const EmployeeList = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Heading title="Employee List" length={employees.length} />
+      <Heading title="Employee List" length={filteredEmployees.length} />
+
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search by any field..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full md:w-1/2 border border-gray-300 px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
       <div className="overflow-x-auto">
         <table className="table table-xs">
           <thead className="bg-[#e9d8d8]">
             <tr className="text-center">
               <th>#</th>
+              <th>ID</th>
               <th>Name</th>
               <th>PF</th>
               <th>Designation</th>
@@ -87,9 +112,10 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {employees.map((emp, index) => (
+            {filteredEmployees.map((emp, index) => (
               <tr key={emp._id}>
                 <td>{index + 1}</td>
+                <td>{emp._id}</td>
                 <td>{emp.name}</td>
                 <td>{emp.pf}</td>
                 <td>{emp.designation}</td>
@@ -108,13 +134,12 @@ const EmployeeList = () => {
                     {emp?.status}
                   </span>
                 </td>
-
                 <td>
                   <div className="flex justify-center items-center gap-2">
                     <Link
                       href={{
                         pathname: "/dashboard/employee/view",
-                        query: { emp: JSON.stringify(emp) }, // serialize the emp object
+                        query: { emp: JSON.stringify(emp) },
                       }}
                       className="text-blue-500 hover:text-blue-700 cursor-pointer"
                       title="View"

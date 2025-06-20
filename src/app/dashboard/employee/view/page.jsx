@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 const ViewEmployee = () => {
   const searchParams = useSearchParams();
-  const empStr = searchParams.get('emp');
+  const empStr = searchParams.get("emp");
   const emp = empStr ? JSON.parse(empStr) : null;
 
   if (!emp) {
@@ -12,12 +12,24 @@ const ViewEmployee = () => {
   }
 
   return (
-    <div>
-      <h1>Employee Details</h1>
-      <p>Name: {emp.name}</p>
-      <p>PF Number: {emp.pf}</p>
-      <p>Department: {emp.department}</p>
-      <p>Designation: {emp.designation}</p>
+    <div className="card w-full max-w-xxl bg-base-100 shadow-sm mx-auto mt-10">
+      <div className="card-body">
+        <h2 className="card-title text-primary text-2xl font-bold">
+          Employee Details
+        </h2>
+        <p>
+          <span className="font-semibold">Name:</span> {emp.name}
+        </p>
+        <p>
+          <span className="font-semibold">PF Number:</span> {emp.pf}
+        </p>
+        <p>
+          <span className="font-semibold">Department:</span> {emp.department}
+        </p>
+        <p>
+          <span className="font-semibold">Designation:</span> {emp.designation}
+        </p>
+      </div>
     </div>
   );
 };

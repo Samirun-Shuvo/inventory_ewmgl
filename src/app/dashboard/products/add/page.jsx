@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { organizations } from "@/constants/selectOptions";
+import { organizations, productStatus } from "@/constants/selectOptions";
 import { productTypes } from "@/constants/selectOptions";
 import LaptopFields from "@/components/formComponent/LaptopFields";
 import PrinterFields from "@/components/formComponent/PrinterFields";
@@ -185,8 +185,12 @@ const AddProduct = () => {
             <option value="" disabled>
               -- Select Status --
             </option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+
+            {productStatus.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
           </select>
           {errors.status && (
             <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
