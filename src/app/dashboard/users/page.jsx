@@ -2,6 +2,7 @@
 
 import Heading from "@/components/Heading";
 import { filterBySearch } from "@/utils/filter";
+import { handleDelete } from "@/utils/handleDelete";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -26,32 +27,7 @@ const UserListPage = () => {
 
     fetchAssignedUsers();
   }, []);
-
-  const handleView = () => {};
   const handleEdit = () => {};
-  const handleDelete = async (id) => {
-    const confirmed = confirm("Are you sure you want to delete this user?");
-    if (!confirmed) return;
-
-    try {
-      const res = await fetch(`/api/users/${id}`, {
-        method: "DELETE",
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("User deleted successfully");
-        // Update local state to reflect deletion
-        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
-      } else {
-        alert(`Error: ${data.message}`);
-      }
-    } catch (error) {
-      console.error("Delete failed:", error);
-      alert("An unexpected error occurred");
-    }
-  };
 
   // 🔍 Filter user based on searchTerm
   const filteredUsers = filterBySearch(users, searchTerm, [
@@ -187,7 +163,14 @@ const UserListPage = () => {
                             <Pencil size={18} />
                           </button>
                           <button
-                            onClick={() => handleDelete(user._id)}
+                            onClick={() =>
+                              handleDelete({
+                                id: user._id,
+                                resource: "users",
+                                setState: setUsers,
+                                itemName: "user",
+                              })
+                            }
                             className="text-red-500 hover:text-red-700 cursor-pointer"
                             title="Delete"
                           >

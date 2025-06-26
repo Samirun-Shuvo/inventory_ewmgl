@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import Heading from "@/components/Heading";
 import Link from "next/link";
 import { filterBySearch } from "@/utils/filter";
+import { handleDelete } from "@/utils/handleDelete";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -33,27 +34,6 @@ const EmployeeList = () => {
   const handleEdit = (id) => {
     console.log("Edit", id);
     // TODO: Implement edit functionality or navigate to edit page
-  };
-
-  const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this employee?")) {
-      try {
-        const res = await fetch(`/api/employees/${id}`, {
-          method: "DELETE",
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          toast.success("Employee deleted successfully!");
-          setEmployees((prev) => prev.filter((emp) => emp._id !== id));
-        } else {
-          toast.error(data.message || "Failed to delete employee");
-        }
-      } catch (error) {
-        console.error("Delete failed:", error);
-        toast.error("An error occurred while deleting.");
-      }
-    }
   };
 
   // 🔍 Filter employee based on searchTerm
@@ -146,7 +126,14 @@ const EmployeeList = () => {
                         <Pencil size={18} />
                       </button>
                       <button
-                        onClick={() => handleDelete(emp._id)}
+                        onClick={() =>
+                          handleDelete({
+                            id: emp._id,
+                            resource: "employees",
+                            setState: setEmployees,
+                            itemName: "employee",
+                          })
+                        }
                         className="text-red-500 hover:text-red-700 cursor-pointer"
                         title="Delete"
                       >

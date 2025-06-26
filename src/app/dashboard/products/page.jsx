@@ -2,6 +2,7 @@
 
 import Heading from "@/components/Heading";
 import { filterBySearch } from "@/utils/filter";
+import { handleDelete } from "@/utils/handleDelete";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -30,33 +31,8 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  const handleView = (id) => {
-    console.log("View product", id);
-  };
-
   const handleEdit = (id) => {
     console.log("Edit product", id);
-  };
-
-  const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this product?")) {
-      try {
-        const res = await fetch(`/api/products/${id}`, {
-          method: "DELETE",
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          toast.success("Product deleted successfully!");
-          setProducts((prev) => prev.filter((prod) => prod._id !== id));
-        } else {
-          toast.error(data.message || "Failed to delete product");
-        }
-      } catch (error) {
-        console.error("Delete failed:", error);
-        toast.error("An error occurred while deleting.");
-      }
-    }
   };
 
   // 🔍 Filter products based on searchTerm
@@ -168,7 +144,14 @@ const ProductList = () => {
                           <Pencil size={18} />
                         </button>
                         <button
-                          onClick={() => handleDelete(product._id)}
+                          onClick={() =>
+                            handleDelete({
+                              id: product._id,
+                              resource: "products",
+                              setState: setProducts,
+                              itemName: "product",
+                            })
+                          }
                           className="text-red-500 hover:text-red-700 cursor-pointer"
                           title="Delete"
                         >
