@@ -1,6 +1,7 @@
 "use client";
 
 import Heading from "@/components/Heading";
+import { filterBySearch } from "@/utils/filter";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -59,26 +60,23 @@ const ProductList = () => {
   };
 
   // 🔍 Filter products based on searchTerm
-  const filteredProducts = products.filter((product) => {
-    const lower = searchTerm.toLowerCase();
-    return (
-      product._id?.toLowerCase().includes(lower) ||
-      product.product_type?.toLowerCase().includes(lower) ||
-      product.organization?.toLowerCase().includes(lower) ||
-      product.brand?.toLowerCase().includes(lower) ||
-      product.model?.toLowerCase().includes(lower) ||
-      product.processor?.toLowerCase().includes(lower) ||
-      product.generation?.toLowerCase().includes(lower) ||
-      product.ssd?.toLowerCase().includes(lower) ||
-      product.hdd?.toLowerCase().includes(lower) ||
-      product.ram?.toLowerCase().includes(lower) ||
-      product.service_tag?.toLowerCase().includes(lower) ||
-      product.serial_number?.toLowerCase().includes(lower) ||
-      product.display_size?.toLowerCase().includes(lower) ||
-      product.type?.toLowerCase().includes(lower) ||
-      product.status?.toLowerCase().includes(lower)
-    );
-  });
+  const filteredProducts = filterBySearch(products, searchTerm, [
+    "_id",
+    "product_type",
+    "organization",
+    "brand",
+    "model",
+    "processor",
+    "generation",
+    "ssd",
+    "hdd",
+    "ram",
+    "service_tag",
+    "serial_number",
+    "display_size",
+    "type",
+    "status",
+  ]);
 
   return (
     <div>

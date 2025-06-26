@@ -1,6 +1,7 @@
 "use client";
 
 import Heading from "@/components/Heading";
+import { filterBySearch } from "@/utils/filter";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -52,37 +53,30 @@ const UserListPage = () => {
     }
   };
 
-  // 🔍 Filter logic
-  const filteredUsers = users.filter((user) => {
-    const lower = searchTerm.toLowerCase();
-    return (
-      user.employeeName?.toLowerCase().includes(lower) ||
-      user.employeePf?.toString().includes(lower) ||
-      user.employeeEmail?.toLowerCase().includes(lower) ||
-      user.employeePhone?.toLowerCase().includes(lower) ||
-      user.employeeDepartment?.toLowerCase().includes(lower) ||
-      user.employeeDesignation?.toLowerCase().includes(lower) ||
-      user.employeeOrganization?.toLowerCase().includes(lower) ||
-      user.productType?.toLowerCase().includes(lower) ||
-      user.productTypeDetail?.toLowerCase().includes(lower) ||
-      user.productModel?.toLowerCase().includes(lower) ||
-      user.productSerial?.toLowerCase().includes(lower) ||
-      user.productServiceTag?.toLowerCase().includes(lower) ||
-      user.productOrganization?.toLowerCase().includes(lower) ||
-      user.productProcessor?.toLowerCase().includes(lower) ||
-      user.productRam?.toLowerCase().includes(lower) ||
-      user.productHdd?.toLowerCase().includes(lower) ||
-      user.productSsd?.toLowerCase().includes(lower) ||
-      user.productGeneration?.toLowerCase().includes(lower) ||
-      user.productDisplaySize?.toLowerCase().includes(lower) ||
-      user.status?.toLowerCase().includes(lower) ||
-      new Date(user.assignedAt)
-        .toISOString()
-        .split("T")[0]
-        .toLowerCase()
-        .includes(lower)
-    );
-  });
+  // 🔍 Filter user based on searchTerm
+  const filteredUsers = filterBySearch(users, searchTerm, [
+    "employeeName",
+    "employeePf",
+    "employeeEmail",
+    "employeePhone",
+    "employeeDepartment",
+    "employeeDesignation",
+    "employeeOrganization",
+    "productType",
+    "productTypeDetail",
+    "productModel",
+    "productSerial",
+    "productServiceTag",
+    "productOrganization",
+    "productProcessor",
+    "productRam",
+    "productHdd",
+    "productSsd",
+    "productGeneration",
+    "productDisplaySize",
+    "status",
+    "assignedAt", // we’ll handle date formatting next
+  ]);
 
   return (
     <div>
