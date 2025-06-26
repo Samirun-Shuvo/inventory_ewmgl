@@ -1,6 +1,7 @@
 "use client";
 
 import Heading from "@/components/Heading";
+import StatusBadge from "@/components/StatusBadge";
 import { filterBySearch } from "@/utils/filter";
 import { handleDelete } from "@/utils/handleDelete";
 import { Eye, Pencil, Trash2 } from "lucide-react";
@@ -114,15 +115,7 @@ const ProductList = () => {
                     <td>{product.display_size || "-"}</td>
                     <td>{product.type || "-"}</td>
                     <td>
-                      <span
-                        className={`badge ${
-                          product.status?.toLowerCase() === "active"
-                            ? "badge-success"
-                            : "badge-warning"
-                        }`}
-                      >
-                        {product.status}
-                      </span>
+                      <StatusBadge status={product?.status} />
                     </td>
                     <td>
                       <div className="flex justify-center items-center gap-2">

@@ -7,6 +7,7 @@ import Heading from "@/components/Heading";
 import Link from "next/link";
 import { filterBySearch } from "@/utils/filter";
 import { handleDelete } from "@/utils/handleDelete";
+import StatusBadge from "@/components/StatusBadge";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -95,15 +96,7 @@ const EmployeeList = () => {
                   <td>{emp.email || "-"}</td>
                   <td>{emp.phone || "-"}</td>
                   <td>
-                    <span
-                      className={`badge ${
-                        emp.status === "Active"
-                          ? "badge-success"
-                          : "badge-warning"
-                      }`}
-                    >
-                      {emp.status || "-"}
-                    </span>
+                    <StatusBadge status={emp?.status} />
                   </td>
                   <td>
                     <div className="flex justify-center items-center gap-2">

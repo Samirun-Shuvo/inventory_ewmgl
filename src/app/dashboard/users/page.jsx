@@ -1,6 +1,7 @@
 "use client";
 
 import Heading from "@/components/Heading";
+import StatusBadge from "@/components/StatusBadge";
 import { filterBySearch } from "@/utils/filter";
 import { handleDelete } from "@/utils/handleDelete";
 import { Eye, Pencil, Trash2 } from "lucide-react";
@@ -133,15 +134,7 @@ const UserListPage = () => {
                           : "-"}
                       </td>
                       <td>
-                        <span
-                          className={`badge ${
-                            user.status === "active"
-                              ? "badge-success"
-                              : "badge-warning"
-                          }`}
-                        >
-                          {user?.status || "-"}
-                        </span>
+                        <StatusBadge status={user?.status} />
                       </td>
                       <td>
                         <div className="flex justify-center items-center gap-2">
