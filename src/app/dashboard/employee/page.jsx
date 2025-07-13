@@ -31,6 +31,7 @@ const EmployeeList = () => {
 
     fetchEmployees();
   }, []);
+console.log(employees);
 
   const handleEdit = (id) => {
     console.log("Edit", id);
@@ -73,12 +74,11 @@ const EmployeeList = () => {
                 <th className="min-w-[40px]">#</th>
                 <th className="min-w-[180px]">ID</th>
                 <th className="min-w-[150px]">Name</th>
+                <th className="min-w-[100px]">IP Extention No</th>
                 <th className="min-w-[100px]">PF</th>
                 <th className="min-w-[180px]">Designation</th>
                 <th className="min-w-[150px]">Department</th>
                 <th className="min-w-[180px]">Organization</th>
-                <th className="min-w-[200px]">Email</th>
-                <th className="min-w-[130px]">Phone</th>
                 <th className="min-w-[100px]">Status</th>
                 <th className="min-w-[140px] text-center">Action</th>
               </tr>
@@ -89,12 +89,11 @@ const EmployeeList = () => {
                   <td>{index + 1}</td>
                   <td>{emp._id}</td>
                   <td>{emp.name || "-"}</td>
+                  <td>{emp.ip_extention_no || "-"}</td>
                   <td>{emp.pf || "-"}</td>
                   <td>{emp.designation || "-"}</td>
                   <td>{emp.department || "-"}</td>
                   <td>{emp.organization || "-"}</td>
-                  <td>{emp.email || "-"}</td>
-                  <td>{emp.phone || "-"}</td>
                   <td>
                     <StatusBadge status={emp?.status} />
                   </td>

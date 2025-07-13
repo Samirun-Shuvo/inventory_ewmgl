@@ -34,25 +34,12 @@ const UserListPage = () => {
   const filteredUsers = filterBySearch(users, searchTerm, [
     "employeeName",
     "employeePf",
-    "employeeEmail",
-    "employeePhone",
     "employeeDepartment",
     "employeeDesignation",
     "employeeOrganization",
     "productType",
-    "productTypeDetail",
-    "productModel",
-    "productSerial",
-    "productServiceTag",
-    "productOrganization",
-    "productProcessor",
-    "productRam",
-    "productHdd",
-    "productSsd",
-    "productGeneration",
-    "productDisplaySize",
     "status",
-    "assignedAt", // we’ll handle date formatting next
+    "assignedAt",
   ]);
 
   return (

@@ -11,7 +11,6 @@ import {
 } from "@/constants/selectOptions";
 import { useRouter } from "next/navigation";
 
-
 const AddEmployee = () => {
   const router = useRouter();
   const {
@@ -84,6 +83,50 @@ const AddEmployee = () => {
             )}
           </div>
 
+          {/* Date Of Birth */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Date Of Birth
+            </label>
+            <input
+              type="date"
+              {...register("dob")}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
+          </div>
+          {/* PF Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              PF Number
+            </label>
+            <input
+              type="number"
+              {...register("pf")}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+            {errors.pf && (
+              <p className="text-red-500 text-sm mt-1">{errors.pf.message}</p>
+            )}
+          </div>
+
+          {/* IP Extention No  */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              IP Extention No
+            </label>
+            <input
+              type="number"
+              {...register("ip_extention_no")}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
+          </div>
+
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -125,21 +168,6 @@ const AddEmployee = () => {
               <p className="text-red-500 text-sm mt-1">
                 {errors.phone.message}
               </p>
-            )}
-          </div>
-
-          {/* PF Number */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              PF Number
-            </label>
-            <input
-              type="number"
-              {...register("pf")}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
-            />
-            {errors.pf && (
-              <p className="text-red-500 text-sm mt-1">{errors.pf.message}</p>
             )}
           </div>
         </div>

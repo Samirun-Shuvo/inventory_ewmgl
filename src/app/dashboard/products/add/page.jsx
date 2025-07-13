@@ -156,7 +156,7 @@ const AddProduct = () => {
         {/* Common Fields */}
         <ProductCommonFields register={register} errors={errors} />
 
-        {/* Submit Button */}
+     
         {/* Submit Button */}
         <div className="md:col-span-2">
           <button

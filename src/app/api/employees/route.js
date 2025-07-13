@@ -20,9 +20,13 @@ export async function POST(request) {
       body;
 
     if (
+      !name ||
+      !email ||
+      !phone ||
       !organization ||
       !department ||
       !designation ||
+      !pf ||
       !status
     ) {
       return new Response(
