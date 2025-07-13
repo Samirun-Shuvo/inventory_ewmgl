@@ -81,23 +81,10 @@ const UserListPage = () => {
                     <th className="min-w-[50px]">#</th>
                     <th className="min-w-[150px]">Name</th>
                     <th className="min-w-[100px]">PF No</th>
-                    <th className="min-w-[200px]">Email</th>
-                    <th className="min-w-[130px]">Phone</th>
                     <th className="min-w-[150px]">Department</th>
                     <th className="min-w-[180px]">Designation</th>
-                    <th className="min-w-[200px]">Employee Org</th>
+                    <th className="min-w-[200px]">Employee Organization</th>
                     <th className="min-w-[100px]">Product Type</th>
-                    <th className="min-w-[150px]">Type Detail</th>
-                    <th className="min-w-[120px]">Model</th>
-                    <th className="min-w-[140px]">Serial</th>
-                    <th className="min-w-[140px]">Service Tag</th>
-                    <th className="min-w-[180px]">Product Org</th>
-                    <th className="min-w-[120px]">Processor</th>
-                    <th className="min-w-[100px]">RAM</th>
-                    <th className="min-w-[100px]">HDD</th>
-                    <th className="min-w-[100px]">SSD</th>
-                    <th className="min-w-[120px]">Generation</th>
-                    <th className="min-w-[120px]">Display Size</th>
                     <th className="min-w-[130px]">Assigned Date</th>
                     <th className="min-w-[100px]">Status</th>
                     <th className="min-w-[140px] text-center">Action</th>
@@ -109,23 +96,10 @@ const UserListPage = () => {
                       <td>{idx + 1}</td>
                       <td>{user.employeeName || "-"}</td>
                       <td>{user.employeePf || "-"}</td>
-                      <td>{user.employeeEmail || "-"}</td>
-                      <td>{user.employeePhone || "-"}</td>
                       <td>{user.employeeDepartment || "-"}</td>
                       <td>{user.employeeDesignation || "-"}</td>
                       <td>{user.employeeOrganization || "-"}</td>
                       <td>{user.productType || "-"}</td>
-                      <td>{user.productTypeDetail || "-"}</td>
-                      <td>{user.productModel || "-"}</td>
-                      <td>{user.productSerial || "-"}</td>
-                      <td>{user.productServiceTag || "-"}</td>
-                      <td>{user.productOrganization || "-"}</td>
-                      <td>{user.productProcessor || "-"}</td>
-                      <td>{user.productRam || "-"}</td>
-                      <td>{user.productHdd || "-"}</td>
-                      <td>{user.productSsd || "-"}</td>
-                      <td>{user.productGeneration || "-"}</td>
-                      <td>{user.productDisplaySize || "-"}</td>
                       <td>
                         {user.assignedAt
                           ? new Date(user.assignedAt)

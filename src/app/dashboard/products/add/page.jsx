@@ -2,18 +2,17 @@
 
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { organizations, productStatus } from "@/constants/selectOptions";
-import { productTypes } from "@/constants/selectOptions";
-import LaptopFields from "@/components/formComponent/LaptopFields";
-import PrinterFields from "@/components/formComponent/PrinterFields";
-import IpPhoneFields from "@/components/formComponent/IpPhoneFields";
-import MouseFields from "@/components/formComponent/MouseFields";
-import KeyboardFields from "@/components/formComponent/KeyboardFields";
-import CpuFields from "@/components/formComponent/CpuFields";
-import MonitorFields from "@/components/formComponent/MonitorFields";
+import {
+  organizations,
+  productStatus,
+  productTypes,
+} from "@/constants/selectOptions";
+import ProductCommonFields from "@/components/formComponent/ProductCommonFields";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const AddProduct = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -23,11 +22,10 @@ const AddProduct = () => {
   } = useForm();
 
   const productType = watch("product_type");
-  const status = watch("status");
 
   const onSubmit = async (data) => {
     const newData = {
-      product_type: productType,
+      product_type: data.product_type || "",
       organization: data.organization || "",
       brand: data.brand || "",
       model: data.model || "",
@@ -40,7 +38,7 @@ const AddProduct = () => {
       ssd: data.ssd || "",
       hdd: data.hdd || "",
       ram: data.ram || "",
-      status: data.status || "",
+      status: "Not Assigned",
     };
 
     try {
@@ -60,7 +58,7 @@ const AddProduct = () => {
       const responseData = await response.json();
       toast.success("Product created successfully!");
       reset(); // clear form
-      console.log("Product created:", responseData);
+      router.push("/dashboard/products");
     } catch (error) {
       toast.error("Failed to create product. Please try again.");
       console.error("Error submitting product:", error.message);
@@ -69,7 +67,7 @@ const AddProduct = () => {
 
   useEffect(() => {
     if (productType) {
-      reset({ product_type: productType });
+      reset((prev) => ({ ...prev, product_type: productType }));
     }
   }, [productType, reset]);
 
@@ -155,48 +153,11 @@ const AddProduct = () => {
           )}
         </div>
 
-        {/* Conditional Fields */}
-        {productType === "Laptop" && <LaptopFields register={register} />}
-        {productType === "CPU" && <CpuFields register={register} />}
-        {productType === "Monitor" && <MonitorFields register={register} />}
-        {productType === "Printer" && <PrinterFields register={register} />}
-        {productType === "IP Phone" && <IpPhoneFields register={register} />}
-        {productType === "Mouse" && <MouseFields register={register} />}
-        {productType === "Keyboard" && <KeyboardFields register={register} />}
+        {/* Common Fields */}
+        <ProductCommonFields register={register} errors={errors} />
 
-        {/* Product Status */}
-        <div className="flex flex-col md:col-span-2">
-          <label
-            htmlFor="status"
-            className="text-sm font-medium text-gray-700 mb-2"
-          >
-            Select Product Status <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="status"
-            {...register("status", {
-              required: "Product status is required",
-            })}
-            className={`block w-full rounded-md border px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
-              errors.status ? "border-red-500 ring-red-500" : "border-gray-300"
-            }`}
-            defaultValue=""
-          >
-            <option value="" disabled>
-              -- Select Status --
-            </option>
-
-            {productStatus.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-          {errors.status && (
-            <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
-          )}
-        </div>
-
+        {/* Submit Button */}
+        {/* Submit Button */}
         <div className="md:col-span-2">
           <button
             type="submit"

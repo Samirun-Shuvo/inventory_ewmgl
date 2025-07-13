@@ -4,6 +4,7 @@ export const organizations = [
   "The Daily Kaler Kantho",
   "Bangla News 24",
   "Capital FM",
+  "T-Sports",
 ];
 export const departments = [
   "HR Admin",
@@ -34,8 +35,9 @@ export const productTypes = [
   "IP Phone",
   "Mouse",
   "Keyboard",
+  "Scanner",
+  "Pendrive",
 ];
 
 export const employeeStatus = ["Active", "Inactive"];
-export const productStatus = ["Active", "Inactive"];
-// export const productStatus = ["Assigned", "Not Assigned","Damage"];
+export const productStatus = ["Assigned", "Not Assigned", "Damaged"];

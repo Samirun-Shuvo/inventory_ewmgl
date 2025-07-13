@@ -9,8 +9,11 @@ import {
   designations,
   employeeStatus,
 } from "@/constants/selectOptions";
+import { useRouter } from "next/navigation";
+
 
 const AddEmployee = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -40,7 +43,9 @@ const AddEmployee = () => {
       }
 
       toast.success("Employee added successfully!");
+
       reset();
+      router.push("/dashboard/employee");
     } catch (err) {
       toast.error("Network error. Please try again.");
     }

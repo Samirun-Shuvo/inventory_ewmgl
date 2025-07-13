@@ -54,13 +54,18 @@ const AddUser = () => {
   const handleSubmit = async () => {
 
     // ✅ Check both statuses
-    if (employee.status !== "Active") {
-      toast.error("Cannot assign product. Employee is not active.");
+    if (employee.status === "Inactive") {
+      toast.error("Cannot assign product. Employee is Inactive.");
       return;
     }
 
-    if (product.status !== "Active") {
-      toast.error("Cannot assign product. Product is not active.");
+    if (product.status === "Assigned") {
+      toast.error("Cannot assign product. Product is already Assigned.");
+      return;
+    }
+
+    if (product.status === "Damaged") {
+      toast.error("Cannot assign product. Product is Damaged.");
       return;
     }
 
@@ -88,7 +93,7 @@ const AddUser = () => {
       productGeneration: product.generation || "",
       productDisplaySize: product.display_size || "",
       productTypeDetail: product.type || "",
-      status: "Active",
+      status: "Assigned",
       assignedAt: new Date().toISOString(),
     };
 
