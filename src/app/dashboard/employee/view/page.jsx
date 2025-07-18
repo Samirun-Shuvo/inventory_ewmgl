@@ -1,8 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-const ViewEmployee = () => {
+const ViewEmployeeInner = () => {
   const searchParams = useSearchParams();
   const empStr = searchParams.get("emp");
   const emp = empStr ? JSON.parse(empStr) : null;
@@ -50,6 +51,14 @@ const ViewEmployee = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const ViewEmployee = () => {
+  return (
+    <Suspense fallback={<div>Loading employee details...</div>}>
+      <ViewEmployeeInner />
+    </Suspense>
   );
 };
 

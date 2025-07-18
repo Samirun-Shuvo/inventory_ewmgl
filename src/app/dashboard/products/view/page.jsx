@@ -2,9 +2,9 @@
 
 import StatusBadge from "@/components/StatusBadge";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 
-const ViewProduct = () => {
+const ProductDetails = () => {
   const searchParams = useSearchParams();
   const productStr = searchParams.get("product");
 
@@ -16,7 +16,9 @@ const ViewProduct = () => {
   }
 
   if (!productDetails) {
-    return <p className="text-center text-gray-600 mt-10">No product data found.</p>;
+    return (
+      <p className="text-center text-gray-600 mt-10">No product data found.</p>
+    );
   }
 
   const {
@@ -40,22 +42,55 @@ const ViewProduct = () => {
   return (
     <div className="card w-full max-w-7xl bg-white shadow-md border border-gray-200 mx-auto mt-10">
       <div className="card-body px-6 py-8">
-        <h2 className="text-2xl font-bold text-blue-600 mb-6">Product Details</h2>
-
+        <h2 className="text-2xl font-bold text-blue-600 mb-6">
+          Product Details
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
-          <p><span className="font-semibold">Product Type:</span> {product_type || "-"}</p>
-          <p><span className="font-semibold">Type:</span> {type || "-"}</p>
-          <p><span className="font-semibold">Brand:</span> {brand || "-"}</p>
-          <p><span className="font-semibold">Model:</span> {model || "-"}</p>
-          <p><span className="font-semibold">Processor:</span> {processor || "-"}</p>
-          <p><span className="font-semibold">Generation:</span> {generation || "-"}</p>
-          <p><span className="font-semibold">RAM:</span> {ram || "-"}</p>
-          <p><span className="font-semibold">HDD:</span> {hdd || "-"}</p>
-          <p><span className="font-semibold">SSD:</span> {ssd || "-"}</p>
-          <p><span className="font-semibold">Display Size:</span> {display_size || "-"}</p>
-          <p><span className="font-semibold">Serial Number:</span> {serial_number || "-"}</p>
-          <p><span className="font-semibold">Service Tag:</span> {service_tag || "-"}</p>
-          <p><span className="font-semibold">Organization:</span> {organization || "-"}</p>
+          <p>
+            <span className="font-semibold">Product Type:</span>{" "}
+            {product_type || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Type:</span> {type || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Brand:</span> {brand || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Model:</span> {model || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Processor:</span> {processor || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Generation:</span>{" "}
+            {generation || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">RAM:</span> {ram || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">HDD:</span> {hdd || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">SSD:</span> {ssd || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Display Size:</span>{" "}
+            {display_size || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Serial Number:</span>{" "}
+            {serial_number || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Service Tag:</span>{" "}
+            {service_tag || "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Organization:</span>{" "}
+            {organization || "-"}
+          </p>
           <p>
             <span className="font-semibold">Status:</span>{" "}
             <StatusBadge status={status} />
@@ -69,5 +104,11 @@ const ViewProduct = () => {
     </div>
   );
 };
+
+const ViewProduct = () => (
+  <Suspense fallback={<div>Loading product details...</div>}>
+    <ProductDetails />
+  </Suspense>
+);
 
 export default ViewProduct;
