@@ -87,7 +87,7 @@ const AddProduct = () => {
             htmlFor="product_type"
             className="text-sm font-medium text-gray-700 mb-2"
           >
-            Product Type <span className="text-red-500">*</span>
+            PRODUCT TYPE <span className="text-red-500">*</span>
           </label>
           <select
             id="product_type"
@@ -123,7 +123,7 @@ const AddProduct = () => {
             htmlFor="organization"
             className="text-sm font-medium text-gray-700 mb-2"
           >
-            Organization <span className="text-red-500">*</span>
+            ORGANIZATION<span className="text-red-500">*</span>
           </label>
           <select
             id="organization"
@@ -154,9 +154,12 @@ const AddProduct = () => {
         </div>
 
         {/* Common Fields */}
-        <ProductCommonFields register={register} errors={errors} />
+        <ProductCommonFields
+          register={register}
+          errors={errors}
+          productType={productType}
+        />
 
-     
         {/* Submit Button */}
         <div className="md:col-span-2">
           <button
