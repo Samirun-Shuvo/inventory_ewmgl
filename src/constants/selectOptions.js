@@ -4,9 +4,29 @@ export const organizations = [
   "The Daily Kaler Kantho",
   "Bangla News 24",
   "Capital FM",
+  "T-Sports",
 ];
-export const departments = ["HR", "Finance", "Engineering", "Sales"];
-export const designations = ["Manager", "Executive", "Engineer", "Officer"];
+export const departments = [
+  "HR Admin",
+  "Advertisement",
+  "Multimedia",
+  "Sports",
+  "Business",
+  "Digital Business",
+  "Reporting",
+  "Online",
+];
+export const designations = [
+  "Manager (HRA)",
+  "General Manager",
+  "Deputy Multimedia Chief",
+  "Soprts Editor",
+  "Chief Business Editor",
+  "Executive",
+  "Deputy Editor",
+  "Deputy News Editor",
+  "Sr. Executive",
+];
 export const productTypes = [
   "Laptop",
   "CPU",
@@ -15,4 +35,9 @@ export const productTypes = [
   "IP Phone",
   "Mouse",
   "Keyboard",
+  "Scanner",
+  "Pendrive",
 ];
+
+export const employeeStatus = ["Active", "Inactive"];
+export const productStatus = ["Assigned", "Not Assigned", "Damaged"];

@@ -1,6 +1,14 @@
 export const navItems = [
   { name: "Dashboard", href: "/dashboard" },
   {
+    name: "Employee",
+    href: "/dashboard/employee",
+    submenu: [
+      { name: "Employee List", href: "/dashboard/employee" },
+      { name: "Add Employee", href: "/dashboard/employee/add" },
+    ],
+  },
+  {
     name: "Products",
     href: "/dashboard/products",
     submenu: [
@@ -14,14 +22,6 @@ export const navItems = [
     submenu: [
       { name: "User List", href: "/dashboard/users" },
       { name: "Add User", href: "/dashboard/users/add" },
-    ],
-  },
-  {
-    name: "Employee",
-    href: "/dashboard/employee",
-    submenu: [
-      { name: "Employee List", href: "/dashboard/employee" },
-      { name: "Add Employee", href: "/dashboard/employee/add" },
     ],
   },
 ];
