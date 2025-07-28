@@ -14,14 +14,8 @@ const ProductCommonFields = ({ register, errors, productType }) => {
           "service_tag",
           "display_size",
         ];
-      case "Printer":
-      case "IP Phone":
-      case "Scanner":
-      case "Pendrive":
-      case "Mouse":
-      case "Keyboard":
-        return ["brand", "model", "serial_number", "service_tag"];
-      default:
+      case "Laptop":
+      case "CPU":
         return [
           "brand",
           "model",
@@ -34,6 +28,8 @@ const ProductCommonFields = ({ register, errors, productType }) => {
           "ram",
           "display_size",
         ];
+      default:
+        return ["brand", "model", "serial_number", "service_tag"];
     }
   };
 

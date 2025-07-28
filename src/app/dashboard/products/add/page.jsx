@@ -154,11 +154,13 @@ const AddProduct = () => {
         </div>
 
         {/* Common Fields */}
-        <ProductCommonFields
-          register={register}
-          errors={errors}
-          productType={productType}
-        />
+        {productType && (
+          <ProductCommonFields
+            register={register}
+            errors={errors}
+            productType={productType}
+          />
+        )}
 
         {/* Submit Button */}
         <div className="md:col-span-2">
