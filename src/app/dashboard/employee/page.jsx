@@ -31,12 +31,6 @@ const EmployeeList = () => {
 
     fetchEmployees();
   }, []);
-console.log(employees);
-
-  const handleEdit = (id) => {
-    console.log("Edit", id);
-    // TODO: Implement edit functionality or navigate to edit page
-  };
 
   // 🔍 Filter employee based on searchTerm
   const filteredEmployees = filterBySearch(employees, searchTerm, [
@@ -109,14 +103,17 @@ console.log(employees);
                       >
                         <Eye size={18} />
                       </Link>
-
-                      <button
-                        onClick={() => handleEdit(emp._id)}
+                      <Link
+                        href={{
+                          pathname: "/dashboard/employee/edit",
+                          query: { emp: JSON.stringify(emp) },
+                        }}
                         className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
                         title="Edit"
                       >
                         <Pencil size={18} />
-                      </button>
+                      </Link>
+
                       <button
                         onClick={() =>
                           handleDelete({

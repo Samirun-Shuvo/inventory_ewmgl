@@ -15,13 +15,11 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Header */}
-      <div className="md:hidden bg-gray-900 px-4 py-3 shadow-md">
-        <h2 className="text-lg font-semibold text-white tracking-wide">
-          EWMGL
-        </h2>
+      <div className="md:hidden bg-gray-900 px-4 py-3 shadow-md flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-white tracking-wide">EWMGL</h2>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-gray-200 hover:text-white transition"
+          className="cursor-pointer text-gray-200 hover:text-white transition"
           aria-label="Toggle menu"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -38,6 +36,7 @@ const Sidebar = () => {
             EWMGL Inventory
           </h2>
         </Link>
+
         <nav className="space-y-2" aria-label="Main menu">
           {navItems.map((item) => (
             <div key={item.name}>
@@ -53,7 +52,7 @@ const Sidebar = () => {
                 <div>
                   <button
                     onClick={() => toggleSubmenu(item.name)}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-blue-600 transition-colors focus:outline-none"
+                    className="cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-blue-600 transition-colors focus:outline-none"
                     aria-expanded={openSubmenu === item.name}
                     aria-controls={`${item.name}-submenu`}
                   >
@@ -64,6 +63,7 @@ const Sidebar = () => {
                       <ChevronDown size={18} />
                     )}
                   </button>
+
                   {openSubmenu === item.name && (
                     <div
                       id={`${item.name}-submenu`}
