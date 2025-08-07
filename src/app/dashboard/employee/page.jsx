@@ -66,7 +66,7 @@ const EmployeeList = () => {
             <thead className="bg-[#e9d8d8]">
               <tr>
                 <th className="min-w-[40px]">#</th>
-                <th className="min-w-[180px]">ID</th>
+                {/* <th className="min-w-[180px]">ID</th> */}
                 <th className="min-w-[150px]">Name</th>
                 <th className="min-w-[100px]">IP Extention No</th>
                 <th className="min-w-[100px]">PF</th>
@@ -81,7 +81,7 @@ const EmployeeList = () => {
               {filteredEmployees.map((emp, index) => (
                 <tr key={emp._id} className="hover:bg-gray-50">
                   <td>{index + 1}</td>
-                  <td>{emp._id}</td>
+                  {/* <td>{emp._id}</td> */}
                   <td>{emp.name || "-"}</td>
                   <td>{emp.ip_extention_no || "-"}</td>
                   <td>{emp.pf || "-"}</td>

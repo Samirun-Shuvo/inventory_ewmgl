@@ -1,7 +1,10 @@
 <!-- 
 1.vercel deploy problem - done
 2.add product hide input depend on product type - done
-3.edit feature for emplyee,product,users
+3.edit feature for :
+-emplyee - done
+-product
+-users
 4.login authentication 
 5.device responsive
 6.code optimizing
