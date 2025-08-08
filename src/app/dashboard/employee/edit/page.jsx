@@ -37,8 +37,6 @@ const EditEmployee = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-    
     try {
       const res = await fetch(`/api/employees/${employee._id}`, {
         method: "PUT",
@@ -157,7 +155,9 @@ const EditEmployee = () => {
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -179,7 +179,9 @@ const EditEmployee = () => {
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
             />
             {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.phone.message}
+              </p>
             )}
           </div>
         </div>
@@ -284,10 +286,14 @@ const EditEmployee = () => {
               ))}
             </select>
             {errors.status && (
-              <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.status.message}
+              </p>
             )}
           </div>
         </div>
+
+
 
         {/* Submit Button */}
         <div className="md:col-span-2">
@@ -297,7 +303,7 @@ const EditEmployee = () => {
             className={`w-full py-3 rounded-lg text-white font-semibold tracking-wide transition duration-300 ${
               isSubmitting
                 ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
+                : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
             }`}
           >
             {isSubmitting ? "Updating..." : "Update Employee"}

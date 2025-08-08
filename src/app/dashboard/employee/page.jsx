@@ -47,7 +47,7 @@ const EmployeeList = () => {
   return (
     <div>
       <Heading title="Employee List" length={filteredEmployees.length} />
-      <div className="mb-4">
+      <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <input
           type="text"
           placeholder="Search by any field..."
@@ -55,7 +55,14 @@ const EmployeeList = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full md:w-1/2 border border-gray-300 px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <Link
+          href="/dashboard/employee/add"
+          className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+        >
+          Add Employee
+        </Link>
       </div>
+
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : filteredEmployees.length === 0 ? (
