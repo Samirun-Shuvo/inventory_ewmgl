@@ -2,10 +2,12 @@
 
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useState } from "react";
 
 export default function Login() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const {
     register,
@@ -13,55 +15,66 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("EWMGL Login Data:", data);
-    // TODO: Authenticate with your backend API here
+  const onSubmit = async (data) => {
+    setErrorMsg("");
+    setLoading(true);
 
-    // Simulate successful login
-    router.push("/dashboard");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(result.message || "Login failed");
+      } else {
+        // Store token & user
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.user));
+
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMsg("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <div className="flex flex-col items-center mb-6">
-          <h1 className="text-2xl font-bold mt-2 text-center">
-            EWMGL Inventory
-          </h1>
-        </div>
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          EWMGL Inventory
+        </h1>
+
+        {errorMsg && <p className="text-sm text-red-600 mb-3">{errorMsg}</p>}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
-              Email
-            </label>
+            <label className="block text-sm font-medium">Email</label>
             <input
-              id="email"
               type="email"
               {...register("email", { required: "Email is required" })}
               className="w-full p-2 border rounded mt-1"
               placeholder="admin@ewmgl.com"
             />
             {errors.email && (
-              <p className="text-sm text-red-600 mt-1">
-                {errors.email.message}
-              </p>
+              <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
-              Password
-            </label>
+            <label className="block text-sm font-medium">Password</label>
             <input
-              id="password"
               type="password"
               {...register("password", {
                 required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Minimum 6 characters",
-                },
+                minLength: { value: 6, message: "Minimum 6 characters" },
               })}
               className="w-full p-2 border rounded mt-1"
               placeholder="••••••••"
@@ -75,9 +88,10 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition cursor-pointer"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
           >
-            LOGIN
+            {loading ? "Logging in..." : "LOGIN"}
           </button>
         </form>
       </div>
