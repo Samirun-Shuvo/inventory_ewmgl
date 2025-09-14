@@ -48,11 +48,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          EWMGL Inventory
-        </h1>
-
-        {errorMsg && <p className="text-sm text-red-600 mb-3">{errorMsg}</p>}
+        <h1 className="text-2xl font-bold mb-6 text-center">EWMGL Inventory</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -64,7 +60,9 @@ export default function Login() {
               placeholder="admin@ewmgl.com"
             />
             {errors.email && (
-              <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>
+              <p className="text-sm text-red-600 mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -85,11 +83,11 @@ export default function Login() {
               </p>
             )}
           </div>
-
+          {errorMsg && <p className="text-sm text-red-600 mb-3">{errorMsg}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? "Logging in..." : "LOGIN"}
           </button>
