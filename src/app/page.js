@@ -1,97 +1,40 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import BackButton from "@/components/BackButton";
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 
-export default function Login() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = async (data) => {
-    setErrorMsg("");
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        setErrorMsg(result.message || "Login failed");
-      } else {
-        // Store token & user
-        localStorage.setItem("token", result.token);
-        localStorage.setItem("user", JSON.stringify(result.user));
-
-        router.push("/dashboard");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setErrorMsg("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+export default function DashboardLayout({ children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">EWMGL Inventory</h1>
+    <div className="min-h-screen flex bg-gray-100">
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Email</label>
-            <input
-              type="email"
-              {...register("email", { required: "Email is required" })}
-              className="w-full p-2 border rounded mt-1"
-              placeholder="admin@ewmgl.com"
-            />
-            {errors.email && (
-              <p className="text-sm text-red-600 mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+      {/* Desktop Sidebar */}
+      <Sidebar className="hidden md:flex" />
 
-          <div>
-            <label className="block text-sm font-medium">Password</label>
-            <input
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-                minLength: { value: 6, message: "Minimum 6 characters" },
-              })}
-              className="w-full p-2 border rounded mt-1"
-              placeholder="••••••••"
-            />
-            {errors.password && (
-              <p className="text-sm text-red-600 mt-1">
-                {errors.password.message}
-              </p>
-            )}
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div
+            className="absolute inset-0 bg-black opacity-50"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <Sidebar className="relative z-50 w-64 bg-gray-800 h-full" />
+        </div>
+      )}
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col">
+        <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+
+        <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8">
+          <div className="max-w-7xl mx-auto space-y-6">
+            <BackButton />
+            {children}
           </div>
-          {errorMsg && <p className="text-sm text-red-600 mb-3">{errorMsg}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-          >
-            {loading ? "Logging in..." : "LOGIN"}
-          </button>
-        </form>
+        </main>
       </div>
     </div>
   );

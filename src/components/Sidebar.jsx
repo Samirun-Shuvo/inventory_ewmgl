@@ -15,8 +15,10 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Header */}
-      <div className="md:hidden bg-gray-900 px-4 py-3 shadow-md flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-white tracking-wide">EWMGL</h2>
+      <header className="md:hidden fixed top-0 left-0 right-0 bg-gray-900 px-4 py-3 shadow-md flex items-center justify-between z-50">
+        <h2 className="text-lg font-semibold text-white tracking-wide">
+          EWMGL
+        </h2>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="cursor-pointer text-gray-200 hover:text-white transition"
@@ -24,15 +26,15 @@ const Sidebar = () => {
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </div>
+      </header>
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:relative top-0 left-0 min-h-screen w-64 bg-gray-900 border-r border-gray-800 shadow-lg px-6 py-5 z-50 transform transition-transform duration-300 ease-in-out
+        className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-gray-900 border-r border-gray-800 shadow-lg px-6 py-5 z-50 transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         <Link href="/dashboard" className="block">
-          <h2 className="text-2xl font-bold text-white mb-10 tracking-tight cursor-pointer hover:text-blue-400 transition">
+          <h2 className="text-2xl font-bold text-white mb-10 tracking-tight cursor-pointer hover:text-blue-400 transition-colors">
             EWMGL Inventory
           </h2>
         </Link>
@@ -52,7 +54,7 @@ const Sidebar = () => {
                 <div>
                   <button
                     onClick={() => toggleSubmenu(item.name)}
-                    className="cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-blue-600 transition-colors focus:outline-none"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-blue-600 transition-colors focus:outline-none"
                     aria-expanded={openSubmenu === item.name}
                     aria-controls={`${item.name}-submenu`}
                   >
@@ -94,10 +96,13 @@ const Sidebar = () => {
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-30 md:hidden z-40"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm md:hidden z-40"
           aria-hidden="true"
         />
       )}
+
+      {/* Content padding for mobile header */}
+      <div className="md:hidden pt-14" />
     </>
   );
 };
