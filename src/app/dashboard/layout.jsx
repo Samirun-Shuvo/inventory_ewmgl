@@ -29,8 +29,8 @@ export default function DashboardLayout({ children }) {
       <div className="flex-1 flex flex-col">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-        <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8">
-          <div className="max-w-7xl mx-auto space-y-6">
+        <main className="flex-1 p-4 sm:p-6 md:p-8">
+          <div className="">
             <BackButton />
             {children}
           </div>
