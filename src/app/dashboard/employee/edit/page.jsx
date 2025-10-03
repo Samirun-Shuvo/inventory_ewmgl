@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
@@ -315,4 +315,10 @@ const EditEmployee = () => {
   );
 };
 
-export default EditEmployee;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditEmployee />
+    </Suspense>
+  );
+}
