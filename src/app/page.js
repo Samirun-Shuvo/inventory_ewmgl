@@ -44,12 +44,8 @@ export default function Login() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            EWMGL Inventory
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Sign in to continue
-          </p>
+          <h1 className="text-2xl font-bold text-gray-800">EWMGL Inventory</h1>
+          <p className="text-gray-500 text-sm mt-1">Sign in to continue</p>
         </div>
 
         {/* Form */}
@@ -107,10 +103,9 @@ export default function Login() {
               {serverError}
             </p>
           )}
-
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 transition"
+            className="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 transition cursor-pointer"
           >
             Login
           </button>
