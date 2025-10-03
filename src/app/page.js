@@ -15,10 +15,9 @@ export default function Login() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    setServerError(null); // reset error before new submission
-
+    setServerError(null);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,49 +32,60 @@ export default function Login() {
         return;
       }
 
-      // Login successful, redirect to dashboard
       router.push("/dashboard");
     } catch (err) {
-      console.error("Login request failed:", err);
-      setServerError("Something went wrong. Please try again later.");
+      console.error("Login error:", err);
+      setServerError("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <div className="flex flex-col items-center mb-6">
-          <h1 className="text-2xl font-bold mt-2 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">
             EWMGL Inventory
           </h1>
+          <p className="text-gray-500 text-sm mt-1">
+            Sign in to continue
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
               id="email"
               type="email"
+              placeholder="you@example.com"
               {...register("email", { required: "Email is required" })}
-              className="w-full p-2 border rounded mt-1"
-              placeholder="admin@ewmgl.com"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             />
             {errors.email && (
-              <p className="text-sm text-red-600 mt-1">
+              <p className="text-sm text-red-500 mt-1">
                 {errors.email.message}
               </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
               id="password"
               type="password"
+              placeholder="••••••••"
               {...register("password", {
                 required: "Password is required",
                 minLength: {
@@ -83,27 +93,33 @@ export default function Login() {
                   message: "Minimum 6 characters",
                 },
               })}
-              className="w-full p-2 border rounded mt-1"
-              placeholder="••••••••"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             />
             {errors.password && (
-              <p className="text-sm text-red-600 mt-1">
+              <p className="text-sm text-red-500 mt-1">
                 {errors.password.message}
               </p>
             )}
           </div>
 
           {serverError && (
-            <p className="text-sm text-red-600 text-center">{serverError}</p>
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-md">
+              {serverError}
+            </p>
           )}
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition cursor-pointer"
+            className="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 transition"
           >
-            LOGIN
+            Login
           </button>
         </form>
+
+        {/* Footer */}
+        <div className="mt-6 text-center text-gray-400 text-sm">
+          © 2025 EWMGL. All rights reserved.
+        </div>
       </div>
     </div>
   );
