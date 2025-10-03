@@ -56,3 +56,40 @@ export async function GET(req, { params }) {
     });
   }
 }
+
+export async function PUT(req, { params }) {
+  try {
+    const { id } = params;
+    const body = await req.json();
+
+    // Prevent _id from being modified
+    delete body._id;
+
+    const { db } = await connectToDatabase();
+    const result = await db.collection("employees").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: body }
+    );
+
+    if (result.matchedCount === 0) {
+      return new Response(JSON.stringify({ message: "Employee not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ message: "Employee updated" }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error updating employee:", error);
+    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
+
+
+

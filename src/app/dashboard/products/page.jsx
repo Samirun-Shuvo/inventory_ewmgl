@@ -65,7 +65,8 @@ const ProductList = () => {
       <Heading title="Product List" length={filteredProducts.length} />
 
       {/* Search */}
-      <div className="mb-4">
+
+      <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <input
           type="text"
           placeholder="Search by any field..."
@@ -73,6 +74,12 @@ const ProductList = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full md:w-1/2 border border-gray-300 px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <Link
+          href="/dashboard/products/add"
+          className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+        >
+          Add Product
+        </Link>
       </div>
 
       {/* Table */}
@@ -123,13 +130,17 @@ const ProductList = () => {
                       >
                         <Eye size={18} />
                       </Link>
-                      <button
-                        onClick={() => handleEdit(product._id)}
+
+                      <Link
+                        href={{
+                          pathname: "/dashboard/products/edit",
+                          query: { product: JSON.stringify(product) },
+                        }}
                         className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
                         title="Edit"
                       >
                         <Pencil size={18} />
-                      </button>
+                      </Link>
                       <button
                         onClick={() =>
                           handleDelete({
