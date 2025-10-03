@@ -31,7 +31,6 @@ const EditEmployee = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm({
     defaultValues: employee || {},
   });
@@ -58,7 +57,11 @@ const EditEmployee = () => {
   };
 
   if (!employee) {
-    return <div className="text-red-500">No employee data found.</div>;
+    return (
+      <div className="max-w-2xl mx-auto mt-12 text-center text-red-500">
+        No employee data found.
+      </div>
+    );
   }
 
   return (
@@ -292,8 +295,6 @@ const EditEmployee = () => {
             )}
           </div>
         </div>
-
-
 
         {/* Submit Button */}
         <div className="md:col-span-2">
