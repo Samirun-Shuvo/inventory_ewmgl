@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
@@ -31,7 +31,6 @@ const EditEmployee = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm({
     defaultValues: employee || {},
   });
@@ -58,7 +57,11 @@ const EditEmployee = () => {
   };
 
   if (!employee) {
-    return <div className="text-red-500">No employee data found.</div>;
+    return (
+      <div className="max-w-2xl mx-auto mt-12 text-center text-red-500">
+        No employee data found.
+      </div>
+    );
   }
 
   return (
@@ -293,8 +296,6 @@ const EditEmployee = () => {
           </div>
         </div>
 
-
-
         {/* Submit Button */}
         <div className="md:col-span-2">
           <button
@@ -314,4 +315,10 @@ const EditEmployee = () => {
   );
 };
 
-export default EditEmployee;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditEmployee />
+    </Suspense>
+  );
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo,Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -230,4 +230,11 @@ const EditProduct = () => {
   );
 };
 
-export default EditProduct;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditProduct />
+    </Suspense>
+  );
+}
+
