@@ -1,6 +1,14 @@
 export const navItems = [
   { name: "Dashboard", href: "/dashboard" },
   {
+    name: "Organizations",
+    href: "/dashboard/organizations",
+    submenu: [
+      { name: "Organizations List", href: "/dashboard/organizations" },
+      // { name: "Add Organization", href: "/dashboard/employee/add" },
+    ],
+  },
+  {
     name: "Employee",
     href: "/dashboard/employee",
     submenu: [
