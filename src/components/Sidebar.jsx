@@ -34,9 +34,11 @@ const Sidebar = () => {
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         <Link href="/dashboard" className="block">
-          <h2 className="text-2xl font-bold text-white mb-10 tracking-tight cursor-pointer hover:text-blue-400 transition-colors">
-            EWMGL Inventory
-          </h2>
+          <img
+            src="/logo.png"
+            alt="EWMGL Logo"
+            className="mx-auto h-12 w-auto mb-2"
+          />
         </Link>
 
         <nav className="space-y-2" aria-label="Main menu">
