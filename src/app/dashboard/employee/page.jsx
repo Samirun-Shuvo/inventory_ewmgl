@@ -9,44 +9,58 @@ import { filterBySearch } from "@/utils/filter";
 import { handleDelete } from "@/utils/handleDelete";
 import StatusBadge from "@/components/StatusBadge";
 
-const EmployeeList = () => {
-  const [employees, setEmployees] = useState([]);
+const OrganizationsList = () => {
+  const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
+  /* =========================
+     Fetch organizations
+  ========================= */
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchOrganizations = async () => {
       try {
-        const res = await fetch("/api/employees");
-        if (!res.ok) throw new Error("Failed to fetch employees");
+        const res = await fetch("/api/organizations");
+        if (!res.ok) throw new Error("Failed to fetch organizations");
         const data = await res.json();
-        setEmployees(data);
+        setOrganizations(data);
       } catch (err) {
-        console.error("Failed to fetch employees", err);
-        toast.error("Failed to fetch employees");
+        console.error(err);
+        toast.error("Failed to fetch organizations");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEmployees();
+    fetchOrganizations();
   }, []);
 
-  // 🔍 Filter employee based on searchTerm
-  const filteredEmployees = filterBySearch(employees, searchTerm, [
-    "name",
-    "pf",
-    "designation",
-    "department",
-    "organization",
-    "email",
-    "phone",
-    "status",
-  ]);
+  /* =========================
+     Search filter
+  ========================= */
+  const filteredOrganizations = filterBySearch(
+    organizations,
+    searchTerm,
+    [
+      "name",
+      "legal_name",
+      "industry",
+      "type",
+      "employee_size",
+      "email",
+      "phone",
+      "status",
+    ]
+  );
 
   return (
     <div>
-      <Heading title="Employee List" length={filteredEmployees.length} />
+      <Heading
+        title="Organization List"
+        length={filteredOrganizations.length}
+      />
+
+      {/* Search + Add */}
       <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <input
           type="text"
@@ -55,67 +69,69 @@ const EmployeeList = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full md:w-1/2 border border-gray-300 px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+
         <Link
-          href="/dashboard/employee/add"
+          href="/dashboard/organizations/add"
           className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
-          Add Employee
+          Add Organization
         </Link>
       </div>
 
+      {/* Table */}
       {loading ? (
         <p className="text-center">Loading...</p>
-      ) : filteredEmployees.length === 0 ? (
-        <p className="text-center">No employee found.</p>
+      ) : filteredOrganizations.length === 0 ? (
+        <p className="text-center">No organization found.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="table table-xs w-full text-center">
             <thead className="bg-[#e9d8d8]">
               <tr>
                 <th className="min-w-[40px]">#</th>
-                {/* <th className="min-w-[180px]">ID</th> */}
-                <th className="min-w-[150px]">Name</th>
-                <th className="min-w-[100px]">IP Extention No</th>
-                <th className="min-w-[100px]">PF</th>
-                <th className="min-w-[180px]">Designation</th>
-                <th className="min-w-[150px]">Department</th>
-                <th className="min-w-[180px]">Organization</th>
+                <th className="min-w-[200px]">Name</th>
+                <th className="min-w-[180px]">Legal Name</th>
+                <th className="min-w-[140px]">Industry</th>
+                <th className="min-w-[120px]">Type</th>
+                <th className="min-w-[120px]">Employee Size</th>
                 <th className="min-w-[100px]">Status</th>
                 <th className="min-w-[140px] text-center">Action</th>
               </tr>
             </thead>
+
             <tbody>
-              {filteredEmployees.map((emp, index) => (
-                <tr key={emp._id} className="hover:bg-gray-50">
+              {filteredOrganizations.map((org, index) => (
+                <tr key={org._id} className="hover:bg-gray-50">
                   <td>{index + 1}</td>
-                  {/* <td>{emp._id}</td> */}
-                  <td>{emp.name || "-"}</td>
-                  <td>{emp.ip_extention_no || "-"}</td>
-                  <td>{emp.pf || "-"}</td>
-                  <td>{emp.designation || "-"}</td>
-                  <td>{emp.department || "-"}</td>
-                  <td>{emp.organization || "-"}</td>
-                  <td>
-                    <StatusBadge status={emp?.status} />
+
+                  <td className="font-medium">
+                    {org.name || "-"}
                   </td>
+
+                  <td>{org.legal_name || "-"}</td>
+                  <td>{org.industry || "-"}</td>
+                  <td>{org.type || "-"}</td>
+                  <td>{org.employee_size || "-"}</td>
+
+                  <td>
+                    <StatusBadge
+                      status={org.is_verified ? "active" : "pending"}
+                    />
+                  </td>
+
                   <td>
                     <div className="flex justify-center items-center gap-2">
                       <Link
-                        href={{
-                          pathname: "/dashboard/employee/view",
-                          query: { emp: JSON.stringify(emp) },
-                        }}
-                        className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                        href={`/dashboard/organizations/view/${org._id}`}
+                        className="text-blue-500 hover:text-blue-700"
                         title="View"
                       >
                         <Eye size={18} />
                       </Link>
+
                       <Link
-                        href={{
-                          pathname: "/dashboard/employee/edit",
-                          query: { emp: JSON.stringify(emp) },
-                        }}
-                        className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
+                        href={`/dashboard/organizations/edit/${org._id}`}
+                        className="text-yellow-500 hover:text-yellow-600"
                         title="Edit"
                       >
                         <Pencil size={18} />
@@ -124,13 +140,13 @@ const EmployeeList = () => {
                       <button
                         onClick={() =>
                           handleDelete({
-                            id: emp._id,
-                            resource: "employees",
-                            setState: setEmployees,
-                            itemName: "employee",
+                            id: org._id,
+                            resource: "organizations",
+                            setState: setOrganizations,
+                            itemName: "organization",
                           })
                         }
-                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                        className="text-red-500 hover:text-red-700"
                         title="Delete"
                       >
                         <Trash2 size={18} />
@@ -147,4 +163,4 @@ const EmployeeList = () => {
   );
 };
 
-export default EmployeeList;
+export default OrganizationsList;
