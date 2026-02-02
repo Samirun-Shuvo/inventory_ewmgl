@@ -78,7 +78,6 @@ const OrganizationsList = () => {
         </Link>
       </div>
 
-      {/* Table */}
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : filteredOrganizations.length === 0 ? (
