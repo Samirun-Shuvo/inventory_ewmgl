@@ -98,7 +98,9 @@ const EmployeeList = () => {
               <tr>
                 <th>Employee</th>
                 <th>Designation</th>
+                <th>Organization</th>
                 <th>Department</th>
+                <th>Extention</th>
                 <th>Phone</th>
                 <th>Status</th>
                 <th className="text-center">Actions</th>
@@ -134,7 +136,9 @@ const EmployeeList = () => {
                   <td className="text-sm font-medium">
                     {emp.designation || "-"}
                   </td>
+                  <td className="text-sm">{emp.organization || "-"}</td>
                   <td className="text-sm">{emp.department || "-"}</td>
+                  <td className="text-sm">{emp.ip_extention_no || "-"}</td>
                   <td className="text-sm">{emp.phone || "-"}</td>
 
                   {/* Status Badge */}
