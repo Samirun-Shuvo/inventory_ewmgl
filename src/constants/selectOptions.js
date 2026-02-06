@@ -67,10 +67,10 @@ export const employeeStatus = [
 export const productStatus = [
   "Available", // In stock and ready to be given out
   "Assigned", // Currently with an employee
-  "In Maintenance", // Being repaired or serviced
+  "In IT-Service Point", // Being repaired or serviced
   "Damaged", // Broken but still in inventory
   "Lost", // Missing/Stolen
   "Reserved", // Held for a specific person/project
+  "In Transit-Toggi Service Point", // Moving between offices or from a supplier
   "Disposed", // Permanently removed (sold, scrapped, or recycled)
-  "In Transit", // Moving between offices or from a supplier
 ];
