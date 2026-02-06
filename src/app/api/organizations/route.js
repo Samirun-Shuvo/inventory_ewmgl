@@ -49,7 +49,7 @@ export async function POST(request) {
     if (!name) {
       return new Response(
         JSON.stringify({ message: "Organization name is required" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -84,7 +84,7 @@ export async function POST(request) {
         message: "Organization added successfully",
         id: result.insertedId,
       }),
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error creating organization:", error);

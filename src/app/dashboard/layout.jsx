@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from "react";
-import BackButton from "@/components/BackButton";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 
@@ -31,7 +30,6 @@ export default function DashboardLayout({ children }) {
 
         <main className="flex-1 p-4 sm:p-6 md:p-8">
           <div className="">
-            <BackButton />
             {children}
           </div>
         </main>

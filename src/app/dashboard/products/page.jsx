@@ -1,8 +1,8 @@
 "use client";
 
 import Heading from "@/components/Heading";
-import StatusBadge from "@/components/StatusBadge";
 import { filterBySearch } from "@/utils/filter";
+import { getProductStatusStyles } from "@/utils/getStatusDesign";
 import { handleDelete } from "@/utils/handleDelete";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -116,7 +116,12 @@ const ProductList = () => {
                   <td>{product.serial_number || "-"}</td>
                   <td>{formatDate(product.createdAt)}</td>
                   <td>
-                    <StatusBadge status={product?.status} />
+                    // Inside your table mapping:
+                    <span
+                      className={`badge badge-sm font-bold ${getProductStatusStyles(product.status)}`}
+                    >
+                      {product.status}
+                    </span>
                   </td>
                   <td>
                     <div className="flex justify-center items-center gap-2">

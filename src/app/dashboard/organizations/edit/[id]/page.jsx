@@ -1,11 +1,15 @@
 "use client";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { useRouter, useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const AddOrganization = () => {
+const EditOrganization = () => {
   const router = useRouter();
+  const { id } = useParams(); // Assumes your file is [id]/page.jsx
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -13,9 +17,38 @@ const AddOrganization = () => {
     reset,
   } = useForm();
 
-  const [loading, setLoading] = React.useState(false);
+  // 1. Fetch existing data
+  useEffect(() => {
+    const fetchOrg = async () => {
+      try {
+        const res = await fetch(`/api/organizations/${id}`);
+        const result = await res.json();
 
+        if (!res.ok) throw new Error("Failed to load organization");
+
+        // Flatten address for the form fields if your API returns it nested
+        const formData = {
+          ...result,
+          city: result.address?.city || "",
+          country: result.address?.country || "",
+        };
+
+        reset(formData); // This fills the form inputs
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setFetching(false);
+      }
+    };
+
+    if (id) fetchOrg();
+  }, [id, reset]);
+
+  // 2. Handle Update
   const onSubmit = async (data) => {
+    setLoading(true);
+    const toastId = toast.loading("Updating organization...");
+
     const payload = {
       ...data,
       address: {
@@ -23,41 +56,41 @@ const AddOrganization = () => {
         country: data.country,
       },
     };
-
     delete payload.city;
     delete payload.country;
 
-    const toastId = toast.loading("Saving organization...");
-
     try {
-      const res = await fetch("/api/organizations", {
-        method: "POST",
+      const res = await fetch(`/api/organizations/${id}`, {
+        method: "PUT", // or "PATCH"
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       const result = await res.json();
 
-      if (!res.ok) {
-        throw new Error(result.message || "Failed to add organization");
-      }
+      if (!res.ok) throw new Error(result.message || "Update failed");
 
-      toast.success("Organization added successfully 🎉", {
-        id: toastId,
-      });
-
-      reset(); // ✅ clear form
-      router.push("/dashboard/organizations"); // ✅ redirect
+      toast.success("Organization updated successfully ✨", { id: toastId });
+      router.push("/dashboard/organizations");
+      router.refresh(); // Ensure the list view gets fresh data
     } catch (error) {
-      toast.error(error.message || "Something went wrong", {
-        id: toastId,
-      });
+      toast.error(error.message, { id: toastId });
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (fetching)
+    return (
+      <div className="p-10 text-center text-xl">
+        Loading Organization Data...
+      </div>
+    );
+
   return (
     <div className="bg-gray-50 min-h-screen p-4 sm:p-6 md:p-10">
       <div className="max-w-4xl mx-auto bg-base-100 shadow rounded-xl p-6 space-y-6">
-        <h2 className="text-2xl font-bold">Add Organization</h2>
+        <h2 className="text-2xl font-bold">Edit Organization</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Organization Name */}
@@ -65,9 +98,7 @@ const AddOrganization = () => {
             <label className="label">Organization Name</label>
             <input
               className="input input-bordered w-full"
-              {...register("name", {
-                required: "Organization name is required",
-              })}
+              {...register("name", { required: "Name is required" })}
             />
             {errors.name && (
               <p className="text-error text-sm mt-1">{errors.name.message}</p>
@@ -92,7 +123,6 @@ const AddOrganization = () => {
                 {...register("type", { required: true })}
               />
             </div>
-
             <div>
               <label className="label">Industry</label>
               <input
@@ -109,13 +139,9 @@ const AddOrganization = () => {
               <input
                 type="email"
                 className="input input-bordered w-full"
-                {...register("email", {
-                  required: true,
-                  pattern: /^\S+@\S+$/i,
-                })}
+                {...register("email", { required: true })}
               />
             </div>
-
             <div>
               <label className="label">Phone</label>
               <input
@@ -123,15 +149,6 @@ const AddOrganization = () => {
                 {...register("phone")}
               />
             </div>
-          </div>
-
-          {/* Website */}
-          <div>
-            <label className="label">Website</label>
-            <input
-              className="input input-bordered w-full"
-              {...register("website")}
-            />
           </div>
 
           {/* Address */}
@@ -143,7 +160,6 @@ const AddOrganization = () => {
                 {...register("city")}
               />
             </div>
-
             <div>
               <label className="label">Country</label>
               <input
@@ -169,30 +185,12 @@ const AddOrganization = () => {
             </select>
           </div>
 
-          {/* Description */}
-          <div>
-            <label className="label">Description</label>
-            <textarea
-              className="textarea textarea-bordered w-full"
-              rows={4}
-              {...register("description")}
-            />
-          </div>
-
-          {/* Logo */}
-          <div>
-            <label className="label">Logo</label>
-            <input
-              type="file"
-              className="file-input file-input-bordered w-full"
-              {...register("logo")}
-            />
-          </div>
-
           {/* Verified */}
           <div className="form-control">
             <label className="label cursor-pointer">
-              <span className="label-text">Verified Organization</span>
+              <span className="label-text text-md font-semibold">
+                Verified Organization
+              </span>
               <input
                 type="checkbox"
                 className="toggle toggle-success"
@@ -204,9 +202,9 @@ const AddOrganization = () => {
           {/* Submit */}
           <div className="flex justify-end gap-3">
             <button
-              type="reset"
+              type="button"
               className="btn btn-ghost"
-              onClick={() => router.push("/dashboard/organizations")}
+              onClick={() => router.back()}
             >
               Cancel
             </button>
@@ -215,7 +213,7 @@ const AddOrganization = () => {
               className="btn btn-primary"
               disabled={loading}
             >
-              {loading ? "Saving..." : "Save Organization"}
+              {loading ? "Updating..." : "Update Organization"}
             </button>
           </div>
         </form>
@@ -224,4 +222,4 @@ const AddOrganization = () => {
   );
 };
 
-export default AddOrganization;
+export default EditOrganization;
