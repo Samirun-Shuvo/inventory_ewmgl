@@ -1,5 +1,6 @@
 "use client";
 import { getOrganizationStatusColor } from "@/utils/getStatusDesign";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -59,7 +60,7 @@ const OrganizationsList = () => {
           <div className="p-10 text-center">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
-        ) : organizations.length === 0 ? (
+        ) : organizations?.length === 0 ? (
           <div className="p-10 text-center text-gray-500 italic">
             No organizations found. Get started by adding one!
           </div>
@@ -77,7 +78,7 @@ const OrganizationsList = () => {
             </thead>
 
             <tbody>
-              {organizations.map((org) => (
+              {organizations?.map((org) => (
                 <tr key={org._id} className="hover">
                   <td>
                     <div className="flex items-center gap-3">
@@ -134,21 +135,21 @@ const OrganizationsList = () => {
                         className="btn btn-square btn-ghost btn-sm tooltip"
                         data-tip="View"
                       >
-                        👁️
+                        <Eye size={18} className="text-info" />
                       </Link>
                       <Link
                         href={`/dashboard/organizations/edit/${org._id}`}
                         className="btn btn-square btn-ghost btn-sm tooltip text-warning"
                         data-tip="Edit"
                       >
-                        ✏️
+                        <Pencil size={18} className="text-warning" />
                       </Link>
                       <button
                         onClick={() => handleDelete(org._id)}
                         className="btn btn-square btn-ghost btn-sm tooltip text-error"
                         data-tip="Delete"
                       >
-                        🗑️
+                        <Trash2 size={18} className="text-error" />
                       </button>
                     </div>
                   </td>

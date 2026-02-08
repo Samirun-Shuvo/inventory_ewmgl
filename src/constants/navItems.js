@@ -13,7 +13,7 @@ export const navItems = [
     href: "/dashboard/employee",
     submenu: [
       { name: "Employee List", href: "/dashboard/employee" },
-      { name: "Add Employee", href: "/dashboard/employee/add" },
+      // { name: "Add Employee", href: "/dashboard/employee/add" },
     ],
   },
   {
@@ -21,7 +21,7 @@ export const navItems = [
     href: "/dashboard/products",
     submenu: [
       { name: "Product List", href: "/dashboard/products" },
-      { name: "Add Product", href: "/dashboard/products/add" },
+      // { name: "Add Product", href: "/dashboard/products/add" },
     ],
   },
   {
@@ -29,7 +29,7 @@ export const navItems = [
     href: "/dashboard/users",
     submenu: [
       { name: "User List", href: "/dashboard/users" },
-      { name: "Add User", href: "/dashboard/users/add" },
+      // { name: "Add User", href: "/dashboard/users/add" },
     ],
   },
 ];

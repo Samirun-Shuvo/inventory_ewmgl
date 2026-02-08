@@ -1,18 +1,20 @@
 "use client";
 
-import Heading from "@/components/Heading";
+import React, { useEffect, useState } from "react";
+import { Eye, Pencil, Trash2, Search, Plus, UserCheck } from "lucide-react";
+import Link from "next/link";
 import StatusBadge from "@/components/StatusBadge";
 import { filterBySearch } from "@/utils/filter";
 import { handleDelete } from "@/utils/handleDelete";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
 
 const UserListPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
+  /* =========================
+      Fetch Assigned Users
+  ========================= */
   useEffect(() => {
     const fetchAssignedUsers = async () => {
       try {
@@ -28,9 +30,10 @@ const UserListPage = () => {
 
     fetchAssignedUsers();
   }, []);
-  const handleEdit = () => {};
 
-  // 🔍 Filter user based on searchTerm
+  /* =========================
+      Search Filter
+  ========================= */
   const filteredUsers = filterBySearch(users, searchTerm, [
     "employeeName",
     "employeePf",
@@ -43,110 +46,157 @@ const UserListPage = () => {
   ]);
 
   return (
-    <div>
-      <Heading title="Assigned Users List" length={filteredUsers.length} />
-
-      <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-        <input
-          type="text"
-          placeholder="Search by any field..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full md:w-1/2 border border-gray-300 px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+    <div className="bg-gray-50 min-h-screen p-4 sm:p-6 md:p-10 space-y-6">
+      {/* Header & Add Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary">
+            Assigned Users
+          </h2>
+          <p className="text-sm text-gray-500">
+            Tracking {filteredUsers.length} asset assignments
+          </p>
+        </div>
         <Link
           href="/dashboard/users/add"
-          className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          className="btn btn-primary flex items-center gap-2"
         >
+          <Plus size={18} />
           Add User
         </Link>
       </div>
-      {loading ? (
-        <p className="text-center">Loading...</p>
-      ) : filteredUsers.length === 0 ? (
-        <p className="text-center">No users found.</p>
-      ) : (
-        <div>
-          <div className="overflow-x-auto">
-            <div className="overflow-x-auto">
-              <table className="table table-xs w-full text-center">
-                <thead className="bg-[#e9d8d8] text-center">
-                  <tr>
-                    <th className="min-w-[50px]">#</th>
-                    <th className="min-w-[150px]">Name</th>
-                    <th className="min-w-[100px]">PF No</th>
-                    <th className="min-w-[150px]">Department</th>
-                    <th className="min-w-[180px]">Designation</th>
-                    <th className="min-w-[200px]">Employee Organization</th>
-                    <th className="min-w-[100px]">Product Type</th>
-                    <th className="min-w-[130px]">Assigned Date</th>
-                    <th className="min-w-[100px]">Status</th>
-                    <th className="min-w-[140px] text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.map((user, idx) => (
-                    <tr key={user._id} className="hover:bg-gray-50">
-                      <td>{idx + 1}</td>
-                      <td>{user.employeeName || "-"}</td>
-                      <td>{user.employeePf || "-"}</td>
-                      <td>{user.employeeDepartment || "-"}</td>
-                      <td>{user.employeeDesignation || "-"}</td>
-                      <td>{user.employeeOrganization || "-"}</td>
-                      <td>{user.productType || "-"}</td>
-                      <td>
-                        {user.assignedAt
-                          ? new Date(user.assignedAt)
-                              .toISOString()
-                              .split("T")[0]
-                          : "-"}
-                      </td>
-                      <td>
-                        <StatusBadge status={user?.status} />
-                      </td>
-                      <td>
-                        <div className="flex justify-center items-center gap-2">
-                          <Link
-                            href={{
-                              pathname: "/dashboard/users/view",
-                              query: { user: JSON.stringify(user) },
-                            }}
-                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                            title="View"
-                          >
-                            <Eye size={18} />
-                          </Link>
-                          <button
-                            onClick={() => handleEdit(user._id)}
-                            className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
-                            title="Edit"
-                          >
-                            <Pencil size={18} />
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleDelete({
-                                id: user._id,
-                                resource: "users",
-                                setState: setUsers,
-                                itemName: "user",
-                              })
-                            }
-                            className="text-red-500 hover:text-red-700 cursor-pointer"
-                            title="Delete"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+
+      {/* Search Bar */}
+      <div className="relative max-w-md">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search size={18} className="text-gray-400" />
         </div>
-      )}
+        <input
+          type="text"
+          placeholder="Search by name, PF, dept or product..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent sm:text-sm"
+        />
+      </div>
+
+      {/* Table Container */}
+      <div className="overflow-x-auto bg-base-100 shadow rounded-xl">
+        {loading ? (
+          <div className="p-10 text-center">
+            <span className="loading loading-spinner loading-lg text-primary"></span>
+          </div>
+        ) : filteredUsers.length === 0 ? (
+          <div className="p-10 text-center text-gray-500 italic">
+            No assigned users found matching your search.
+          </div>
+        ) : (
+          <table className="table table-zebra w-full">
+            <thead className="bg-base-200 text-sm uppercase text-gray-600 font-semibold">
+              <tr>
+                <th className="w-12">#</th>
+                <th>Employee Details</th>
+                <th>Role & Dept</th>
+                <th>Asset Type</th>
+                <th>Assigned Date</th>
+                <th>Status</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredUsers.map((user, idx) => (
+                <tr key={user._id} className="hover transition-colors">
+                  <td className="text-xs opacity-50 font-mono">{idx + 1}</td>
+
+                  {/* Name & PF Column */}
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-50 rounded-lg text-blue-600">
+                        <UserCheck size={20} />
+                      </div>
+                      <div>
+                        <div className="font-bold">{user.employeeName || "N/A"}</div>
+                        <div className="text-[11px] opacity-60 font-semibold uppercase">
+                          PF: {user.employeePf || "-"}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Role & Dept Column */}
+                  <td className="text-sm">
+                    <div className="font-medium text-gray-700">
+                      {user.employeeDesignation || "-"}
+                    </div>
+                    <div className="text-xs opacity-60">
+                      {user.employeeDepartment || "-"}
+                    </div>
+                  </td>
+
+                  {/* Product Type Badge */}
+                  <td>
+                    <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs font-bold uppercase">
+                      {user.productType || "-"}
+                    </span>
+                  </td>
+
+                  {/* Date Column */}
+                  <td className="text-sm">
+                    {user.assignedAt
+                      ? new Date(user.assignedAt).toLocaleDateString("en-GB")
+                      : "-"}
+                  </td>
+
+                  {/* Status Column */}
+                  <td>
+                    <StatusBadge status={user?.status} />
+                  </td>
+
+                  {/* Actions Column */}
+                  <td>
+                    <div className="flex justify-center gap-1">
+                      <Link
+                        href={{
+                          pathname: "/dashboard/users/view",
+                          query: { user: JSON.stringify(user) },
+                        }}
+                        className="btn btn-square btn-ghost btn-sm tooltip"
+                        data-tip="View Details"
+                      >
+                        <Eye size={18} className="text-info" />
+                      </Link>
+
+                      <Link
+                        href={`/dashboard/users/edit/${user._id}`}
+                        className="btn btn-square btn-ghost btn-sm tooltip"
+                        data-tip="Edit Assignment"
+                      >
+                        <Pencil size={18} className="text-warning" />
+                      </Link>
+
+                      <button
+                        onClick={() =>
+                          handleDelete({
+                            id: user._id,
+                            resource: "users",
+                            setState: setUsers,
+                            itemName: "user",
+                          })
+                        }
+                        className="btn btn-square btn-ghost btn-sm tooltip"
+                        data-tip="Delete"
+                      >
+                        <Trash2 size={18} className="text-error" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 };
