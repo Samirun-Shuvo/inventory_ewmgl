@@ -12,7 +12,7 @@ const EditProduct = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // 1. Define State for Organizations
+  // 1. State for dynamic data
   const [organizations, setOrganizations] = useState([]);
   const [loadingOrgs, setLoadingOrgs] = useState(true);
 
@@ -46,8 +46,7 @@ const EditProduct = () => {
         const res = await fetch("/api/organizations");
         if (!res.ok) throw new Error("Failed to fetch organizations");
         const data = await res.json();
-        // Adjust "data" mapping based on your API response structure
-        setOrganizations(data); 
+        setOrganizations(data);
       } catch (err) {
         console.error("Error fetching organizations:", err);
         toast.error("Could not load organizations");
@@ -59,13 +58,14 @@ const EditProduct = () => {
   }, []);
 
   /* =========================
-      Reset Form with Details
+      3. Reset Form (THE FIX)
   ========================= */
   useEffect(() => {
-    if (productDetails) {
+    // We only reset if productDetails exists AND organizations are finished loading
+    if (productDetails && !loadingOrgs) {
       reset({
         product_type: productDetails.product_type || "",
-        organization: productDetails.organization || "",
+        organization: productDetails.organization || "", // Now this will find a match in the list
         brand: productDetails.brand || "",
         model: productDetails.model || "",
         display_size: productDetails.display_size || "",
@@ -77,10 +77,10 @@ const EditProduct = () => {
         ssd: productDetails.ssd || "",
         hdd: productDetails.hdd || "",
         ram: productDetails.ram || "",
-        status: productDetails.status || "",
+        status: productDetails.status || "", // Matches "Not Assigned"
       });
     }
-  }, [productDetails, reset]);
+  }, [productDetails, reset, loadingOrgs]); // loadingOrgs is a key dependency here
 
   const onSubmit = async (data) => {
     if (!productDetails?._id) {
@@ -144,7 +144,7 @@ const EditProduct = () => {
           {errors.product_type && <p className="mt-1 text-sm text-red-600">{errors.product_type.message}</p>}
         </div>
 
-        {/* 3. Dynamic Organization Field */}
+        {/* Organization */}
         <div className="flex flex-col md:col-span-2">
           <label htmlFor="organization" className="text-sm font-medium text-gray-700 mb-2">
             ORGANIZATION <span className="text-red-500">*</span>
@@ -158,10 +158,9 @@ const EditProduct = () => {
             }`}
           >
             <option value="" disabled>
-              {loadingOrgs ? "Loading organizations..." : "Select an organization"}
+              {loadingOrgs ? "Loading..." : "Select an organization"}
             </option>
             {organizations.map((org) => (
-              // Handles if org is a string or an object with name/_id
               <option key={org._id || org} value={org.name || org}>
                 {org.name || org}
               </option>
@@ -201,7 +200,7 @@ const EditProduct = () => {
             type="submit"
             disabled={isSubmitting}
             className={`w-full py-3 rounded-lg text-white font-semibold tracking-wide transition duration-300 ${
-              isSubmitting ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+              isSubmitting ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
             {isSubmitting ? "Updating..." : "Update Product"}
