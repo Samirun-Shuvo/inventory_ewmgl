@@ -1,33 +1,28 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
 
 // GET Product by ID
+
 export async function GET(req, { params }) {
   try {
     const { id } = params;
-    const { db } = await connectToDatabase();
 
-    const product = await db
-      .collection("products")
-      .findOne({ _id: new ObjectId(id) });
-
-    if (!product) {
-      return new Response(JSON.stringify({ message: "product not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json({ message: "Invalid ID format" }, { status: 400 });
     }
 
-    return new Response(JSON.stringify(product), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    const { db } = await connectToDatabase();
+    const product = await db.collection("products").findOne({ _id: new ObjectId(id) });
+
+    if (!product) {
+      return NextResponse.json({ message: "Product not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(product, { status: 200 });
   } catch (error) {
-    console.error("Error fetching product:", error);
-    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error("[PRODUCT_GET_ERROR]:", error);
+    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
 

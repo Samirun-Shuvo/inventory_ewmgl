@@ -189,10 +189,7 @@ const ProductList = () => {
                   <td>
                     <div className="flex justify-center gap-1">
                       <Link
-                        href={{
-                          pathname: `/dashboard/products/view/${product._id}`,
-                          query: { product: JSON.stringify(product) },
-                        }}
+                        href={`/dashboard/products/view/${product._id}`}
                         className="btn btn-square btn-ghost btn-sm tooltip"
                         data-tip="View Details"
                       >
@@ -200,11 +197,7 @@ const ProductList = () => {
                       </Link>
 
                       <Link
-                        href={{
-                          // Change "href" to "pathname" here
-                          pathname: `/dashboard/products/edit/${product._id}`,
-                          query: { product: JSON.stringify(product) },
-                        }}
+                        href={`/dashboard/products/edit/${product._id}`}
                         className="btn btn-square btn-ghost btn-sm tooltip"
                         data-tip="Edit Product"
                       >
