@@ -13,6 +13,9 @@ const ProductCommonFields = ({ register, errors, productType }) => {
           "serial_number",
           "service_tag",
           "display_size",
+          "specifications",
+          "note",
+          "user_information",
         ];
       case "Laptop":
       case "CPU":
@@ -27,9 +30,20 @@ const ProductCommonFields = ({ register, errors, productType }) => {
           "hdd",
           "ram",
           "display_size",
+          "specifications",
+          "note",
+          "user_information",
         ];
       default:
-        return ["brand", "model", "serial_number", "service_tag"];
+        return [
+          "brand",
+          "model",
+          "serial_number",
+          "service_tag",
+          "specifications",
+          "note",
+          "user_information", 
+        ];
     }
   };
 

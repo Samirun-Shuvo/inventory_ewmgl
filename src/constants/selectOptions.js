@@ -1,22 +1,39 @@
-export const organizations = [
-  "East West Media Group PLC",
-  "Bangladesh Protidin",
-  "The Daily Kaler Kantho",
-  "Bangla News 24",
-  "Capital FM",
-  "T-Sports",
-];
 export const departments = [
-  "HR Admin",
-  "Advertisement",
-  "Multimedia",
-  "Sports",
-  "Business",
-  "Digital Business",
+  "Editor's",
+  "Editorial",
+  "Islami Jibon",
+  "News Management",
+  "Central Desk",
+  "Mofassal",
   "Reporting",
+  "Buisness",
+  "Sports",
+  "Photography",
+  "Feature",
+  "Literature",
+  "Shuvo Shango",
+  "Reference",
   "Online",
+  "Multimedia",
+  "Editing Assistant",
+  "ART,Graphics & Computer",
+  "Administration",
+  "Editor, Exicutive Editor Attendant",
+  "Story",
+  "PABX/Telephone 1",
+  "IT",
+  "Web",
+  "Sales & Marketing",
+  "Online Marketing",
+  "Circulation",
+  "Accounts",
 ];
 export const designations = [
+  "Editor",
+  "Executive Editor",
+  "Planning Editor",
+  "Senior Reporter",
+  "Reporter",
   "Manager (HRA)",
   "General Manager",
   "Deputy Multimedia Chief",
@@ -39,5 +56,21 @@ export const productTypes = [
   "Pendrive",
 ];
 
-export const employeeStatus = ["Active", "Inactive"];
-export const productStatus = ["Assigned", "Not Assigned", "Damaged"];
+export const employeeStatus = [
+  "Active",
+  "Inactive",
+  "Resigned",
+  "Terminated",
+  "On Leave",
+  "Absconding",
+];
+export const productStatus = [
+  "Available", // In stock and ready to be given out
+  "Assigned", // Currently with an employee
+  "In IT-Service Point", // Being repaired or serviced
+  "Damaged", // Broken but still in inventory
+  "Lost", // Missing/Stolen
+  "Reserved", // Held for a specific person/project
+  "In Transit-Toggi Service Point", // Moving between offices or from a supplier
+  "Disposed", // Permanently removed (sold, scrapped, or recycled)
+];

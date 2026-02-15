@@ -1,13 +1,12 @@
 "use client";
 
-import Heading from "@/components/Heading";
-import StatusBadge from "@/components/StatusBadge";
+import React, { useEffect, useState } from "react";
+import { Eye, Pencil, Trash2, Search, Plus, Package } from "lucide-react";
+import { toast } from "react-hot-toast";
+import Link from "next/link";
 import { filterBySearch } from "@/utils/filter";
 import { handleDelete } from "@/utils/handleDelete";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { getProductStatusStyles } from "@/utils/getStatusDesign";
 
 const formatDate = (dateString) => {
   if (!dateString) return "-";
@@ -20,6 +19,9 @@ const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
+  /* =========================
+      Fetch Products
+  ========================= */
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -38,10 +40,9 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  const handleEdit = (id) => {
-    console.log("Edit product", id);
-  };
-
+  /* =========================
+      Search filter
+  ========================= */
   const filteredProducts = filterBySearch(products, searchTerm, [
     "_id",
     "product_type",
@@ -61,86 +62,149 @@ const ProductList = () => {
   ]);
 
   return (
-    <div>
-      <Heading title="Product List" length={filteredProducts.length} />
-
-      {/* Search */}
-
-      <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-        <input
-          type="text"
-          placeholder="Search by any field..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full md:w-1/2 border border-gray-300 px-4 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+    <div className="bg-gray-50 min-h-screen p-4 sm:p-6 md:p-10 space-y-6">
+      {/* Header & Add Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary">
+            Products
+          </h2>
+          <p className="text-sm text-gray-500">
+            Managing {filteredProducts.length} total inventory items
+          </p>
+        </div>
         <Link
           href="/dashboard/products/add"
-          className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          className="btn btn-primary flex items-center gap-2"
         >
+          <Plus size={18} />
           Add Product
         </Link>
       </div>
 
-      {/* Table */}
-      {loading ? (
-        <p className="text-center py-8 text-gray-600">Loading products...</p>
-      ) : filteredProducts.length === 0 ? (
-        <p className="text-center py-8 text-gray-600">No products found.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="table table-xs w-full text-center">
-            <thead className="bg-[#e9d8d8]">
+      {/* Search Bar */}
+      <div className="relative max-w-md">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search size={18} className="text-gray-400" />
+        </div>
+        <input
+          type="text"
+          placeholder="Search by ID, Brand, SN or Type..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent sm:text-sm"
+        />
+      </div>
+
+      {/* Table Container */}
+      <div className="overflow-x-auto bg-base-100 shadow rounded-xl">
+        {loading ? (
+          <div className="p-10 text-center">
+            <span className="loading loading-spinner loading-lg text-primary"></span>
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="p-10 text-center text-gray-500 italic">
+            No products found matching your search.
+          </div>
+        ) : (
+          <table className="table table-zebra w-full">
+            <thead className="bg-base-200 text-sm uppercase text-gray-600 font-semibold">
               <tr>
-                <th className="min-w-[40px]">#</th>
-                <th className="min-w-[180px]">Product ID</th>
-                <th className="min-w-[120px]">Product Type</th>
-                <th className="min-w-[200px]">Organization</th>
-                <th className="min-w-[180px]">Brand</th>
-                <th className="min-w-[130px]">Service Tag</th>
-                <th className="min-w-[130px]">Serial Number</th>
-                <th className="min-w-[130px]">Stored Date</th>
-                <th className="min-w-[150px]">Status</th>
-                <th className="min-w-[120px]">Action</th>
+                <th className="w-12">#</th>
+                <th>Product Info</th>
+                <th>Brand & Model</th>
+                <th>Identifiers</th>
+                <th>Organization</th>
+                <th>Date Added</th>
+                <th>User Information</th>
+                <th>Status</th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {filteredProducts.map((product, index) => (
-                <tr key={product._id || `${product.serial_number}-${index}`}>
-                  <td>{index + 1}</td>
-                  <td>{product._id || "-"}</td>
-                  <td>{product.product_type || "-"}</td>
-                  <td>{product.organization || "-"}</td>
-                  <td>{product.brand || "-"}</td>
-                  <td>{product.service_tag || "-"}</td>
-                  <td>{product.serial_number || "-"}</td>
-                  <td>{formatDate(product.createdAt)}</td>
+                <tr key={product._id} className="hover transition-colors">
+                  <td className="text-xs opacity-50 font-mono">{index + 1}</td>
+
+                  {/* Product Type Icon & ID */}
                   <td>
-                    <StatusBadge status={product?.status} />
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gray-100 rounded-lg">
+                        <Package size={20} className="text-gray-600" />
+                      </div>
+                      <div>
+                        <div className="font-bold">
+                          {product.product_type || "N/A"}
+                        </div>
+                        <div className="text-[10px] font-mono opacity-50">
+                          {product._id}
+                        </div>
+                      </div>
+                    </div>
                   </td>
+
+                  <td className="text-sm">
+                    <div className="font-medium text-gray-700">
+                      {product.brand || "-"}
+                    </div>
+                    <div className="text-xs opacity-60">
+                      {product.model || "-"}
+                    </div>
+                  </td>
+
+                  <td className="text-sm">
+                    <div className="flex flex-col">
+                      <span className="text-[11px] text-gray-400 uppercase font-semibold">
+                        S/N:
+                      </span>
+                      <span>{product.serial_number || "-"}</span>
+                      <span className="text-[11px] text-gray-400 uppercase font-semibold mt-1">
+                        Tag:
+                      </span>
+                      <span>{product.service_tag || "-"}</span>
+                    </div>
+                  </td>
+
+                  <td className="text-sm">
+                    <div className="font-medium">
+                      {product.organization || "-"}
+                    </div>
+                    <div className="text-xs opacity-60">
+                      {product.department || "-"}
+                    </div>
+                  </td>
+
+                  <td className="text-sm">{formatDate(product.createdAt)}</td>
+                  <td className="text-sm">{product.user_information || "-"}</td>
+                  {/* Status Badge */}
                   <td>
-                    <div className="flex justify-center items-center gap-2">
+                    <span
+                      className={`badge badge-sm font-semibold capitalize ${getProductStatusStyles(product.status)}`}
+                    >
+                      {product.status}
+                    </span>
+                  </td>
+
+                  {/* Actions Column */}
+                  <td>
+                    <div className="flex justify-center gap-1">
                       <Link
-                        href={{
-                          pathname: "/dashboard/products/view",
-                          query: { product: JSON.stringify(product) },
-                        }}
-                        className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        title="View"
+                        href={`/dashboard/products/view/${product._id}`}
+                        className="btn btn-square btn-ghost btn-sm tooltip"
+                        data-tip="View Details"
                       >
-                        <Eye size={18} />
+                        <Eye size={18} className="text-info" />
                       </Link>
 
                       <Link
-                        href={{
-                          pathname: "/dashboard/products/edit",
-                          query: { product: JSON.stringify(product) },
-                        }}
-                        className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
-                        title="Edit"
+                        href={`/dashboard/products/edit/${product._id}`}
+                        className="btn btn-square btn-ghost btn-sm tooltip"
+                        data-tip="Edit Product"
                       >
-                        <Pencil size={18} />
+                        <Pencil size={18} className="text-warning" />
                       </Link>
+
                       <button
                         onClick={() =>
                           handleDelete({
@@ -150,10 +214,10 @@ const ProductList = () => {
                             itemName: "product",
                           })
                         }
-                        className="text-red-500 hover:text-red-700 cursor-pointer"
-                        title="Delete"
+                        className="btn btn-square btn-ghost btn-sm tooltip"
+                        data-tip="Delete"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={18} className="text-error" />
                       </button>
                     </div>
                   </td>
@@ -161,8 +225,8 @@ const ProductList = () => {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

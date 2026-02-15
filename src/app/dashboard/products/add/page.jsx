@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  organizations,
-  productStatus,
-  productTypes,
-} from "@/constants/selectOptions";
+import { productStatus, productTypes } from "@/constants/selectOptions";
 import ProductCommonFields from "@/components/formComponent/ProductCommonFields";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const AddProduct = () => {
   const router = useRouter();
+
+  // 1. Add state to hold the organizations
+  const [organizations, setOrganizations] = useState([]);
+  const [loadingOrgs, setLoadingOrgs] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -22,6 +23,30 @@ const AddProduct = () => {
   } = useForm();
 
   const productType = watch("product_type");
+
+  /* =========================
+      Fetch Organizations
+  ========================= */
+  useEffect(() => {
+    const fetchOrgs = async () => {
+      try {
+        const res = await fetch("/api/organizations"); // Ensure this matches your API route
+        if (!res.ok) throw new Error("Failed to fetch organizations");
+        const data = await res.json();
+
+        // Assuming your API returns an array of strings or objects
+        // If it's an array of objects like [{name: 'Org1'}], map it accordingly
+        setOrganizations(data);
+      } catch (err) {
+        console.error(err);
+        toast.error("Could not load organizations");
+      } finally {
+        setLoadingOrgs(false);
+      }
+    };
+
+    fetchOrgs();
+  }, []);
 
   const onSubmit = async (data) => {
     const newData = {
@@ -38,15 +63,16 @@ const AddProduct = () => {
       ssd: data.ssd || "",
       hdd: data.hdd || "",
       ram: data.ram || "",
-      status: "Not Assigned",
+      specifications: data.specifications || "",
+      note: data.note || "",
+      user_information: data.user_information || "",
+      status: data.status || "",
     };
 
     try {
       const response = await fetch("/api/products", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newData),
       });
 
@@ -55,16 +81,16 @@ const AddProduct = () => {
         throw new Error(errorData.message || "Something went wrong");
       }
 
-      const responseData = await response.json();
       toast.success("Product created successfully!");
-      reset(); // clear form
+      reset();
       router.push("/dashboard/products");
     } catch (error) {
-      toast.error("Failed to create product. Please try again.");
+      toast.error("Failed to create product.");
       console.error("Error submitting product:", error.message);
     }
   };
 
+  // Keep product type selection when reset triggers
   useEffect(() => {
     if (productType) {
       reset((prev) => ({ ...prev, product_type: productType }));
@@ -94,10 +120,8 @@ const AddProduct = () => {
             {...register("product_type", {
               required: "Product type is required",
             })}
-            className={`block w-full rounded-md border px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
-              errors.product_type
-                ? "border-red-500 ring-red-500"
-                : "border-gray-300"
+            className={`block w-full rounded-md border px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+              errors.product_type ? "border-red-500" : "border-gray-300"
             }`}
             defaultValue=""
           >
@@ -123,26 +147,27 @@ const AddProduct = () => {
             htmlFor="organization"
             className="text-sm font-medium text-gray-700 mb-2"
           >
-            ORGANIZATION<span className="text-red-500">*</span>
+            ORGANIZATION <span className="text-red-500">*</span>
           </label>
           <select
             id="organization"
             {...register("organization", {
               required: "Organization is required",
             })}
-            className={`block w-full rounded-md border px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
-              errors.organization
-                ? "border-red-500 ring-red-500"
-                : "border-gray-300"
+            className={`block w-full rounded-md border px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+              errors.organization ? "border-red-500" : "border-gray-300"
             }`}
             defaultValue=""
+            disabled={loadingOrgs}
           >
             <option value="" disabled>
-              Select an organization
+              {loadingOrgs
+                ? "Loading organizations..."
+                : "Select an organization"}
             </option>
-            {organizations.map((organization) => (
-              <option key={organization} value={organization}>
-                {organization}
+            {organizations?.map((org) => (
+              <option key={org._id || org} value={org.name || org}>
+                {org.name || org}
               </option>
             ))}
           </select>
@@ -161,6 +186,32 @@ const AddProduct = () => {
             productType={productType}
           />
         )}
+        {/* Status (Full Width) */}
+        <div className="flex flex-col md:col-span-2">
+          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+            Operational Status <span className="text-red-500">*</span>
+          </label>
+          <select
+            {...register("status", { required: "Status is required" })}
+            className={`select select-bordered w-full bg-gray-50 focus:bg-white transition-all ${
+              errors.status ? "select-error" : ""
+            }`}
+          >
+            <option value="" disabled>
+              Select status...
+            </option>
+            {productStatus?.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+          {errors.status && (
+            <p className="mt-1 text-xs text-red-500 font-medium">
+              {errors.status.message}
+            </p>
+          )}
+        </div>
 
         {/* Submit Button */}
         <div className="md:col-span-2">
@@ -169,8 +220,8 @@ const AddProduct = () => {
             disabled={isSubmitting}
             className={`w-full py-3 rounded-lg text-white font-semibold tracking-wide transition duration-300 ${
               isSubmitting
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                ? "bg-blue-400 cursor-not-allowed" // Shows 'no-entry' circle when loading
+                : "bg-blue-600 hover:bg-blue-700 cursor-pointer" // Shows 'hand' pointer when active
             }`}
           >
             {isSubmitting ? "Adding..." : "Add Product"}

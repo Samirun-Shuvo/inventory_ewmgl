@@ -1,33 +1,40 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
+import { use } from "react";
 
 // GET Product by ID
+
 export async function GET(req, { params }) {
   try {
     const { id } = params;
-    const { db } = await connectToDatabase();
 
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { message: "Invalid ID format" },
+        { status: 400 },
+      );
+    }
+
+    const { db } = await connectToDatabase();
     const product = await db
       .collection("products")
       .findOne({ _id: new ObjectId(id) });
 
     if (!product) {
-      return new Response(JSON.stringify({ message: "product not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 },
+      );
     }
 
-    return new Response(JSON.stringify(product), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(product, { status: 200 });
   } catch (error) {
-    console.error("Error fetching product:", error);
-    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error("[PRODUCT_GET_ERROR]:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -61,7 +68,6 @@ export async function DELETE(req, { params }) {
   }
 }
 
-
 // UPDATE Product by ID (PUT)
 export async function PUT(req, { params }) {
   try {
@@ -83,14 +89,17 @@ export async function PUT(req, { params }) {
       ssd: body.ssd || "",
       hdd: body.hdd || "",
       ram: body.ram || "",
-      status: body.status || "Not Assigned",
+      specifications: body.specifications || "",
+      note: body.note || "",
+      user_information: body.user_information || "",
+      status: body.status || "",
     };
 
     const result = await db.collection("products").updateOne(
       { _id: new ObjectId(id) },
       {
         $set: updateFields,
-      }
+      },
     );
 
     if (result.matchedCount === 0) {
@@ -100,10 +109,13 @@ export async function PUT(req, { params }) {
       });
     }
 
-    return new Response(JSON.stringify({ message: "Product updated successfully" }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ message: "Product updated successfully" }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   } catch (error) {
     console.error("Error updating product:", error);
     return new Response(JSON.stringify({ message: "Internal Server Error" }), {

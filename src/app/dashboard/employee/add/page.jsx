@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import {
-  organizations,
   departments,
   designations,
   employeeStatus,
@@ -13,6 +12,9 @@ import { useRouter } from "next/navigation";
 
 const AddEmployee = () => {
   const router = useRouter();
+  const [organizations, setOrganizations] = useState([]);
+  const [loadingOrgs, setLoadingOrgs] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -20,10 +22,24 @@ const AddEmployee = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const [message, setMessage] = useState({ type: "", text: "" });
+  // Fetch Organizations from your API
+  useEffect(() => {
+    const fetchOrgs = async () => {
+      try {
+        const res = await fetch("/api/organizations");
+        if (!res.ok) throw new Error("Failed to load organizations");
+        const data = await res.json();
+        setOrganizations(data);
+      } catch (err) {
+        toast.error("Could not load organizations list");
+      } finally {
+        setLoadingOrgs(false);
+      }
+    };
+    fetchOrgs();
+  }, []);
 
   const onSubmit = async (data) => {
-    setMessage({ type: "", text: "" });
     try {
       const res = await fetch("/api/employees", {
         method: "POST",
@@ -31,119 +47,101 @@ const AddEmployee = () => {
         body: JSON.stringify(data),
       });
 
+      const result = await res.json();
+
       if (!res.ok) {
-        let errorMsg = "Failed to add employee";
-        try {
-          const error = await res.json();
-          toast.error(error.message || "Something went wrong");
-        } catch (e) {}
-        setMessage({ type: "error", text: errorMsg });
-        return;
+        throw new Error(result.message || "Failed to add employee");
       }
 
       toast.success("Employee added successfully!");
-
       reset();
-      router.push("/dashboard/employee");
+      router.push("/dashboard/employee"); // Redirect to list
     } catch (err) {
-      toast.error("Network error. Please try again.");
+      toast.error(err.message || "Network error. Please try again.");
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-12 bg-white rounded-xl shadow-md p-8">
-      <h2 className="text-3xl font-semibold text-center mb-8 text-gray-800">
+    <div className="max-w-5xl mx-auto mt-12 bg-white rounded-xl shadow-md p-8 border border-gray-100">
+      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
         Add New Employee
       </h2>
 
-      {message.text && (
-        <p
-          className={`text-center text-sm mb-6 ${
-            message.type === "success" ? "text-green-600" : "text-red-600"
-          }`}
-        >
-          {message.text}
-        </p>
-      )}
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Full Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Full Name
             </label>
             <input
               type="text"
-              {...register("name")}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              {...register("name", { required: "Name is required" })}
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 outline-none ${errors.name ? "border-red-500" : "border-gray-300"}`}
+              placeholder="e.g. John Doe"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
             )}
           </div>
 
           {/* Date Of Birth */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Date Of Birth
             </label>
             <input
               type="date"
-              {...register("dob")}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              {...register("dob", { required: "DOB is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-            )}
           </div>
+
           {/* PF Number */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               PF Number
             </label>
             <input
-              type="number"
-              {...register("pf")}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              type="text"
+              {...register("pf", { required: "PF Number is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. 10293"
             />
-            {errors.pf && (
-              <p className="text-red-500 text-sm mt-1">{errors.pf.message}</p>
-            )}
           </div>
 
-          {/* IP Extention No  */}
+          {/* IP Extension No */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              IP Extention No
+            <label className="block text-sm font-semibold text-gray-700">
+              IP Extension No
             </label>
             <input
-              type="number"
+              type="text"
               {...register("ip_extention_no")}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. 5501"
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-            )}
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
+            <label className="block text-sm font-semibold text-gray-700">
+              Email Address
             </label>
             <input
               type="email"
               {...register("email", {
+                required: "Email is required",
                 pattern: {
                   value: /^\S+@\S+$/i,
                   message: "Invalid email format",
                 },
               })}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="john@company.com"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-500 text-xs mt-1">
                 {errors.email.message}
               </p>
             )}
@@ -151,49 +149,41 @@ const AddEmployee = () => {
 
           {/* Phone Number */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Phone Number
             </label>
             <input
               type="text"
-              {...register("phone", {
-                pattern: {
-                  value: /^[0-9]{10,15}$/,
-                  message: "Enter a valid phone number",
-                },
-              })}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              {...register("phone", { required: "Phone is required" })}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="+8801..."
             />
-            {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.phone.message}
-              </p>
-            )}
           </div>
-        </div>
 
-        {/* Dropdowns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Organization */}
+          {/* Organization Dropdown */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Organization
             </label>
             <select
               {...register("organization", {
-                required: "Organization is required",
+                required: "Please select an organization",
               })}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">Select organization</option>
+              <option value="">
+                {loadingOrgs
+                  ? "Loading organizations..."
+                  : "Select organization"}
+              </option>
               {organizations.map((org) => (
-                <option key={org} value={org}>
-                  {org}
+                <option key={org._id} value={org.name}>
+                  {org.name}
                 </option>
               ))}
             </select>
             {errors.organization && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-500 text-xs mt-1">
                 {errors.organization.message}
               </p>
             )}
@@ -201,14 +191,14 @@ const AddEmployee = () => {
 
           {/* Department */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Department
             </label>
             <select
               {...register("department", {
                 required: "Department is required",
               })}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select department</option>
               {departments.map((dept) => (
@@ -217,23 +207,18 @@ const AddEmployee = () => {
                 </option>
               ))}
             </select>
-            {errors.department && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.department.message}
-              </p>
-            )}
           </div>
 
           {/* Designation */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Designation
             </label>
             <select
               {...register("designation", {
                 required: "Designation is required",
               })}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select designation</option>
               {designations.map((des) => (
@@ -242,21 +227,16 @@ const AddEmployee = () => {
                 </option>
               ))}
             </select>
-            {errors.designation && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.designation.message}
-              </p>
-            )}
           </div>
 
           {/* Status */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Status
             </label>
             <select
               {...register("status", { required: "Status is required" })}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 bg-white rounded-md shadow-sm outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select status</option>
               {employeeStatus.map((status) => (
@@ -265,26 +245,28 @@ const AddEmployee = () => {
                 </option>
               ))}
             </select>
-            {errors.status && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.status.message}
-              </p>
-            )}
           </div>
         </div>
 
         {/* Submit Button */}
-        <div className="md:col-span-2">
+        <div className="pt-4">
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-3 rounded-lg text-white font-semibold tracking-wide transition duration-300 ${
+            className={`w-full py-3 rounded-lg text-white font-bold tracking-wider uppercase transition-all shadow-lg ${
               isSubmitting
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 active:transform active:scale-95"
             }`}
           >
-            {isSubmitting ? "Adding..." : "Add Employee"}
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="loading loading-spinner loading-xs"></span>
+                Processing...
+              </span>
+            ) : (
+              "Add Employee"
+            )}
           </button>
         </div>
       </form>
