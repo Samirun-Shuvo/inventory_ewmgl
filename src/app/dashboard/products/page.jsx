@@ -116,6 +116,7 @@ const ProductList = () => {
                 <th>Identifiers</th>
                 <th>Organization</th>
                 <th>Date Added</th>
+                <th>User Information</th>
                 <th>Status</th>
                 <th className="text-center">Actions</th>
               </tr>
@@ -175,7 +176,7 @@ const ProductList = () => {
                   </td>
 
                   <td className="text-sm">{formatDate(product.createdAt)}</td>
-
+                  <td className="text-sm">{product.user_information || "-"}</td>
                   {/* Status Badge */}
                   <td>
                     <span

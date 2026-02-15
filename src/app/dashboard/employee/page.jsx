@@ -124,7 +124,7 @@ const EmployeeList = () => {
                       <div>
                         <div className="font-bold">{emp.name}</div>
                         <div className="text-xs opacity-60">
-                          ID: {emp.employee_id || "N/A"}
+                          PF_NO: {emp.pf || "N/A"}
                         </div>
                         <div className="text-[11px] opacity-40">
                           {emp.email}

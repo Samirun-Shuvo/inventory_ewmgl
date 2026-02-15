@@ -24,12 +24,12 @@ export const navItems = [
       // { name: "Add Product", href: "/dashboard/products/add" },
     ],
   },
-  {
-    name: "Users",
-    href: "/dashboard/users",
-    submenu: [
-      { name: "User List", href: "/dashboard/users" },
-      // { name: "Add User", href: "/dashboard/users/add" },
-    ],
-  },
+  // {
+  //   name: "Users",
+  //   href: "/dashboard/users",
+  //   submenu: [
+  //     { name: "User List", href: "/dashboard/users" },
+  //     // { name: "Add User", href: "/dashboard/users/add" },
+  //   ],
+  // },
 ];

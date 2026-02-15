@@ -74,6 +74,9 @@ const EditProductForm = () => {
           ssd: productData.ssd || "",
           hdd: productData.hdd || "",
           ram: productData.ram || "",
+          specifications: productData.specifications || "",
+          note: productData.note || "",
+          user_information: productData.user_information || "",
           status: productData.status || "",
         });
       } catch (err) {

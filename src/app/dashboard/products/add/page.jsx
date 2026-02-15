@@ -2,17 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  productStatus,
-  productTypes,
-} from "@/constants/selectOptions";
+import { productStatus, productTypes } from "@/constants/selectOptions";
 import ProductCommonFields from "@/components/formComponent/ProductCommonFields";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const AddProduct = () => {
   const router = useRouter();
-  
+
   // 1. Add state to hold the organizations
   const [organizations, setOrganizations] = useState([]);
   const [loadingOrgs, setLoadingOrgs] = useState(true);
@@ -36,7 +33,7 @@ const AddProduct = () => {
         const res = await fetch("/api/organizations"); // Ensure this matches your API route
         if (!res.ok) throw new Error("Failed to fetch organizations");
         const data = await res.json();
-        
+
         // Assuming your API returns an array of strings or objects
         // If it's an array of objects like [{name: 'Org1'}], map it accordingly
         setOrganizations(data);
@@ -66,7 +63,10 @@ const AddProduct = () => {
       ssd: data.ssd || "",
       hdd: data.hdd || "",
       ram: data.ram || "",
-      status: "Not Assigned",
+      specifications: data.specifications || "",
+      note: data.note || "",
+      user_information: data.user_information || "",
+      status: data.status || "",
     };
 
     try {
@@ -109,33 +109,51 @@ const AddProduct = () => {
       >
         {/* Product Type */}
         <div className="flex flex-col md:col-span-2">
-          <label htmlFor="product_type" className="text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="product_type"
+            className="text-sm font-medium text-gray-700 mb-2"
+          >
             PRODUCT TYPE <span className="text-red-500">*</span>
           </label>
           <select
             id="product_type"
-            {...register("product_type", { required: "Product type is required" })}
+            {...register("product_type", {
+              required: "Product type is required",
+            })}
             className={`block w-full rounded-md border px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
               errors.product_type ? "border-red-500" : "border-gray-300"
             }`}
             defaultValue=""
           >
-            <option value="" disabled>Select a product type</option>
+            <option value="" disabled>
+              Select a product type
+            </option>
             {productTypes.map((type) => (
-              <option key={type} value={type}>{type}</option>
+              <option key={type} value={type}>
+                {type}
+              </option>
             ))}
           </select>
-          {errors.product_type && <p className="mt-1 text-sm text-red-600">{errors.product_type.message}</p>}
+          {errors.product_type && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.product_type.message}
+            </p>
+          )}
         </div>
 
         {/* Organization */}
         <div className="flex flex-col md:col-span-2">
-          <label htmlFor="organization" className="text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="organization"
+            className="text-sm font-medium text-gray-700 mb-2"
+          >
             ORGANIZATION <span className="text-red-500">*</span>
           </label>
           <select
             id="organization"
-            {...register("organization", { required: "Organization is required" })}
+            {...register("organization", {
+              required: "Organization is required",
+            })}
             className={`block w-full rounded-md border px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
               errors.organization ? "border-red-500" : "border-gray-300"
             }`}
@@ -143,7 +161,9 @@ const AddProduct = () => {
             disabled={loadingOrgs}
           >
             <option value="" disabled>
-              {loadingOrgs ? "Loading organizations..." : "Select an organization"}
+              {loadingOrgs
+                ? "Loading organizations..."
+                : "Select an organization"}
             </option>
             {organizations?.map((org) => (
               <option key={org._id || org} value={org.name || org}>
@@ -151,7 +171,11 @@ const AddProduct = () => {
               </option>
             ))}
           </select>
-          {errors.organization && <p className="mt-1 text-sm text-red-600">{errors.organization.message}</p>}
+          {errors.organization && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.organization.message}
+            </p>
+          )}
         </div>
 
         {/* Common Fields */}
@@ -162,6 +186,32 @@ const AddProduct = () => {
             productType={productType}
           />
         )}
+        {/* Status (Full Width) */}
+        <div className="flex flex-col md:col-span-2">
+          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+            Operational Status <span className="text-red-500">*</span>
+          </label>
+          <select
+            {...register("status", { required: "Status is required" })}
+            className={`select select-bordered w-full bg-gray-50 focus:bg-white transition-all ${
+              errors.status ? "select-error" : ""
+            }`}
+          >
+            <option value="" disabled>
+              Select status...
+            </option>
+            {productStatus?.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+          {errors.status && (
+            <p className="mt-1 text-xs text-red-500 font-medium">
+              {errors.status.message}
+            </p>
+          )}
+        </div>
 
         {/* Submit Button */}
         <div className="md:col-span-2">
@@ -169,7 +219,9 @@ const AddProduct = () => {
             type="submit"
             disabled={isSubmitting}
             className={`w-full py-3 rounded-lg text-white font-semibold tracking-wide transition duration-300 ${
-              isSubmitting ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+              isSubmitting
+                ? "bg-blue-400 cursor-not-allowed" // Shows 'no-entry' circle when loading
+                : "bg-blue-600 hover:bg-blue-700 cursor-pointer" // Shows 'hand' pointer when active
             }`}
           >
             {isSubmitting ? "Adding..." : "Add Product"}
