@@ -1,0 +1,10 @@
+//create .env.local and keep below info there
+
+PROJECT=ewmgl_inventory
+DATABASE=ewmgl_inventory
+USER=ewmgl_admin
+PASS=im3JvS3KpCzYNptP
+BASE_URL_LOCAL=http://localhost:3000
+NODE_ENV=development
+MONGODB_DB=ewmgl_inventory
+MONGODB_URI=mongodb+srv://ewmgl_admin:im3JvS3KpCzYNptP@cluster20.4j2xzrx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster20

@@ -57,6 +57,7 @@ const ProductList = () => {
     "service_tag",
     "serial_number",
     "display_size",
+    "user_information",
     "type",
     "status",
   ]);
@@ -89,7 +90,7 @@ const ProductList = () => {
         </div>
         <input
           type="text"
-          placeholder="Search by ID, Brand, SN or Type..."
+          placeholder="Search by PF, Name, Brand, SN or Type..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent sm:text-sm"
